@@ -1,1 +1,7 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@theme {
+    --color-midnight: #150A18;
+    --color-blue-dark: #6382BB;
+    --font-mono: "Geist Mono", monospace;
+  }
