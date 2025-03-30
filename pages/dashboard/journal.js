@@ -1,13 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/landing/Navbar';
 import { addJournalEntry } from '@/backend/database';
 import { useStateContext } from '@/context/StateContent';
+import { useRouter } from 'next/router';
 
 export default function Journal() {
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [newEntry, setNewEntry] = useState({ title: '', body: '' });
   const [entries, setEntries] = useState([]);
   const { user } = useStateContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
 
   const formatText = (text) => {
     return text.split('\n').map((line, i) => (
@@ -19,6 +27,11 @@ export default function Journal() {
   };
 
   const handleSubmit = async () => {
+    if (!user) {
+      alert('Please log in to add entries');
+      return;
+    }
+
     if (newEntry.title.trim() === '' && newEntry.body.trim() === '') return;
     
     const currentDate = new Date().toLocaleDateString('en-US', {
