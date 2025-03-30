@@ -1,6 +1,6 @@
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
-import { StateContext } from "@/context/StateContent";
+import { StateContext } from "@/context/StateContext";
 
 const inter = Inter({ subsets: ["latin"] });
 

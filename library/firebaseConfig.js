@@ -8,7 +8,7 @@ const firebaseConfig = {
   projectId: "questlog-12284",
   storageBucket: "questlog-12284.firebasestorage.app",
   messagingSenderId: "563782173858",
-  appId: "1:563782173858:web:6a64c2dc4e3cc7a89b43fb"
+  appId: "1:563782173858:web:6a64c2dc4e3cc7a89b43fb",
 };
 
 const app = initializeApp(firebaseConfig);

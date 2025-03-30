@@ -35,7 +35,7 @@ export default function TaskModal({
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSave();
     }
@@ -49,8 +49,8 @@ export default function TaskModal({
       setStartTime(initialStart ?? "");
       setEndTime(initialEnd ?? "");
       setColor(initialColor ?? "#f59e0b");
-      window.addEventListener('keydown', handleKeyPress);
-      return () => window.removeEventListener('keydown', handleKeyPress);
+      window.addEventListener("keydown", handleKeyPress);
+      return () => window.removeEventListener("keydown", handleKeyPress);
     }
   }, [
     isOpen,
@@ -66,8 +66,13 @@ export default function TaskModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md space-y-4" onKeyDown={handleKeyPress}>
-        <h2 className="text-xl font-bold">{isEditing ? 'Edit Task' : 'Add Task'}</h2>
+      <div
+        className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md space-y-4"
+        onKeyDown={handleKeyPress}
+      >
+        <h2 className="text-xl font-bold">
+          {isEditing ? "Edit Task" : "Add Task"}
+        </h2>
 
         <div className="space-y-2">
           <label className="block text-sm">Title</label>
