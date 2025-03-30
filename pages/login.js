@@ -2,12 +2,14 @@ import Navbar from "@/components/landing/Navbar";
 import { useState } from "react";
 import { logUserIn } from "@/backend/auth";
 import { useRouter } from "next/router";
+import { useAuth } from "@/context/AuthContext";
 
 export default function login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const { setUser } = useAuth();
 
   const validateUserCredentials = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -31,8 +33,8 @@ export default function login() {
     }
 
     try {
-      await logUserIn(email, password);
-      router.push("/dashboard")
+      await logUserIn(email, password, setUser);
+      router.push("/dashboard/journal");
     } catch (err) {
       setError(err.message);
     }
@@ -40,7 +42,7 @@ export default function login() {
 
   const navigation = [
     { name: "Home", href: "/", current: false }
-    ]
+  ];
 
   return (
     <div className="min-h-screen bg-[#150A18]">
