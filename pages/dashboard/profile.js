@@ -5,6 +5,7 @@ import { useStateContext } from "@/context/StateContext";
 import { useRouter } from "next/router";
 import { db } from "@/library/firebaseConfig";
 import { doc, getDoc } from "firebase/firestore";
+import Navbar from "@/components/landing/Navbar";
 
 // Dummy data for demonstration
 const initialQuests = [
@@ -129,6 +130,12 @@ export default function ProfilePage() {
     );
   }
 
+  const navigation = [
+    { name: "Journal", href: "/dashboard/journal", current: false },
+    { name: "Calendar", href: "/dashboard/calendar", current: false },
+    { name: "Quests", href: "/dashboard/quests", current: false },
+  ];
+
   return (
     <div className="min-h-screen bg-[#150A18] text-white relative">
       {/* Background grid with diagonal lines */}
@@ -136,32 +143,7 @@ export default function ProfilePage() {
       <div className="fixed inset-0 bg-[linear-gradient(45deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-5" />
 
       {/* Navigation */}
-      <nav className="relative z-10 border-b border-[#08F7FE]/20 bg-[#1F1225]/50 backdrop-blur-md">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-12">
-              <Link
-                href="/dashboard/journal"
-                className="text-[#FF2E63] hover:text-[#ff4777] transition-colors font-mono text-xl"
-              >
-                Journal
-              </Link>
-              <Link
-                href="/dashboard/calendar"
-                className="text-[#FF2E63] hover:text-[#ff4777] transition-colors font-mono text-xl"
-              >
-                Calendar
-              </Link>
-              <Link
-                href="/dashboard/quests"
-                className="text-[#FF2E63] hover:text-[#ff4777] transition-colors font-mono text-xl"
-              >
-                Quests
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar navLinks={navigation} />
 
       {/* Main Content */}
       <main className="relative z-10 max-w-7xl mx-auto px-4 py-8">
