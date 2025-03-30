@@ -21,7 +21,7 @@ export default function SideQuest({ title, description, reward }) {
                 <div className="flex items-center gap-4 mb-4">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                         isCompleted ? 'bg-[#FF2E63]/20' : 'bg-[#08F7FE]/20'
-                    } rotate-45 transition-all duration-300 group-hover:rotate-[225deg] ring-2 ${
+                    } rotate-45 transition-all duration-300 ring-2 ${
                         isCompleted ? 'ring-[#FF2E63]' : 'ring-[#08F7FE]'
                     }`}>
                         <div className="-rotate-45 transition-all duration-300 group-hover:rotate-[-225deg]">
@@ -66,7 +66,7 @@ export default function SideQuest({ title, description, reward }) {
                             e.stopPropagation();
                             setIsCompleted(!isCompleted);
                         }}
-                        className={`px-4 py-2 font-semibold transition-all duration-300 font-mono relative
+                        className={`px-4 py-2 font-semibold transition-all duration-300 font-mono relative hover:scale-105
                             ${isCompleted 
                                 ? 'text-[#FF2E63]' 
                                 : 'text-[#08F7FE]'

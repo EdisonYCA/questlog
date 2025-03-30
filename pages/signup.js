@@ -2,6 +2,7 @@ import Navbar from "@/components/landing/Navbar";
 import { useState } from "react";
 import { signUpUser } from "@/backend/auth";
 import { useRouter } from "next/router";
+import { useStateContext } from "@/context/StateContent";
 
 export default function signup() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ export default function signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const {setUser} = useStateContext();
 
   const validateUserCredentials = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -36,7 +38,7 @@ export default function signup() {
     }
 
     try {
-      await signUpUser(email, password);
+      await signUpUser(email, password, setUser);
       router.push("/interests");
     } catch (err) {
       setError(err.message);
@@ -48,9 +50,9 @@ export default function signup() {
     ]
 
   return (
-    <>
-      <Navbar navLinks={navigation}></Navbar>
-      <div className="flex min-h-screen items-center justify-center bg-[#150A18]">
+    <div className="min-h-screen bg-[#150A18]">
+      <Navbar navLinks={navigation}/>
+      <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md p-8 bg-[#442A46] rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold text-center text-white">
             Create an Account
@@ -137,6 +139,6 @@ export default function signup() {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
