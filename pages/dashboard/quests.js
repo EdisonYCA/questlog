@@ -1,4 +1,4 @@
-import MainQuest from "../components/Quest/MainQuest";
+import MainQuest from "../../components/Quest/MainQuest";
 import LevelIndicator from "@/components/Quest/LevelIndicator";
 import SideQuest from "@/components/Quest/SideQuest";
 import Navbar from "@/components/landing/Navbar";

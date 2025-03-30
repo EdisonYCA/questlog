@@ -51,7 +51,7 @@ export default function InterestsPage() {
       // Here you would typically save the selected topics to your backend/database
       console.log('Selected topics:', selectedTopics);
       console.log('Selected genres:', selectedGenres);
-      router.push('/journal'); 
+      router.push('/dashboard/journal'); 
     }
   };
 

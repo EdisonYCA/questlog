@@ -32,7 +32,7 @@ export default function login() {
 
     try {
       await logUserIn(email, password);
-      router.push("/dashboard");
+      router.push("/dashboard/journal");
     } catch (err) {
       setError(err.message);
     }
@@ -118,7 +118,7 @@ export default function login() {
           {/* Register Link */}
           <p className="mt-4 text-center text-[#E0D6EB] text-sm">
             Don't have an account?{" "}
-            <a href="#" className="text-[#3E5A8E] font-medium hover:underline">
+            <a href="/signup" className="text-[#3E5A8E] font-medium hover:underline">
               Sign Up
             </a>
           </p>
