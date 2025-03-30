@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 const colorOptions = [
+  "#f59e0b", // yellow
   "#ec4899", // pink
   "#10b981", // green
   "#3b82f6", // blue
-  "#f59e0b", // yellow
   "#ef4444", // red
   "#8b5cf6", // purple
 ];
@@ -27,7 +27,7 @@ export default function TaskModal({
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [description, setDescription] = useState("");
-  const [color, setColor] = useState("#ec4899"); // default pink
+  const [color, setColor] = useState("#f59e0b"); // default yellow instead of pink
 
   const handleSave = () => {
     onSave({ title, date, startTime, endTime, description, color });
@@ -48,7 +48,7 @@ export default function TaskModal({
       setDate(initialDate ?? "");
       setStartTime(initialStart ?? "");
       setEndTime(initialEnd ?? "");
-      setColor(initialColor ?? "#ec4899");
+      setColor(initialColor ?? "#f59e0b"); // default to yellow instead of pink
       window.addEventListener('keydown', handleKeyPress);
       return () => window.removeEventListener('keydown', handleKeyPress);
     }
@@ -60,12 +60,6 @@ export default function TaskModal({
     initialTitle,
     initialDescription,
     initialColor,
-    title,
-    date,
-    startTime,
-    endTime,
-    description,
-    color,
   ]);
 
   if (!isOpen) return null;
@@ -73,7 +67,7 @@ export default function TaskModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
       <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md space-y-4" onKeyDown={handleKeyPress}>
-        <h2 className="text-xl font-bold">Add Task</h2>
+        <h2 className="text-xl font-bold">{isEditing ? 'Edit Task' : 'Add Task'}</h2>
 
         <div className="space-y-2">
           <label className="block text-sm">Title</label>
@@ -82,6 +76,7 @@ export default function TaskModal({
             className="w-full p-2 rounded bg-gray-800 border border-gray-600"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter task title"
           />
 
           <label className="block text-sm">Date</label>
@@ -134,6 +129,7 @@ export default function TaskModal({
             className="w-full p-2 rounded bg-gray-800 border border-gray-600"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            placeholder="Enter task description"
           />
         </div>
 
@@ -168,4 +164,4 @@ export default function TaskModal({
   );
 }
 
-//testing
+//testingg

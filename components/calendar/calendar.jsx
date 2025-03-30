@@ -50,7 +50,7 @@ export default function WeeklyCalendar() {
       start: formatTime(start),
       end: formatTime(end),
       description: event.extendedProps.description || "",
-      color: event.backgroundColor || event.color || "#ec4899",
+      color: event.backgroundColor || event.color || "#f59e0b",
     });
 
     setSelectedInfo(null); // not a new one
@@ -142,7 +142,7 @@ export default function WeeklyCalendar() {
         initialEnd={editingEvent?.end || selectedInfo?.end}
         initialTitle={editingEvent?.title || ""}
         initialDescription={editingEvent?.description || ""}
-        initialColor={editingEvent?.color || "#ec4899"}
+        initialColor={editingEvent?.color || "#f59e0b"}
         isEditing={!!editingEvent}
       />
       
@@ -202,4 +202,4 @@ export default function WeeklyCalendar() {
   );
 }
 
-// testing
+// testingg
