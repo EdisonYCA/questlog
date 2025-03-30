@@ -61,16 +61,18 @@ export const addJournalEntry = async (uid, entry) => {
       year: "numeric",
     });
 
+    // Create the entry without timestamp
     const newEntry = {
       id: Date.now(),
       title: entry.title,
       body: entry.body,
       date: currentDate,
-      timestamp: serverTimestamp(),
     };
 
+    // Update the journals array with the entry
     await updateDoc(userRef, {
-      journals: arrayUnion(newEntry)
+      journals: arrayUnion(newEntry),
+      [`journalTimestamps.${newEntry.id}`]: serverTimestamp()
     });
 
     return newEntry;

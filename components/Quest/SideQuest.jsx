@@ -1,32 +1,10 @@
 import { GiCrossedSwords } from 'react-icons/gi';
 import { FaCheckCircle } from 'react-icons/fa';
 import React, { useState } from 'react';
-import { db } from '@/library/firebaseConfig';
-import { doc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
-import { useStateContext } from '@/context/StateContext';
 
-export default function SideQuest({ title, description, reward, quest }) {
+export default function SideQuest({ title, description, reward }) {
     const [isCompleted, setIsCompleted] = useState(false);
-    const { user } = useStateContext();
     
-    const handleComplete = async () => {
-        if (!user) return;
-        
-        try {
-            const userRef = doc(db, "users", user.uid);
-            
-            // Use the full quest object for arrayRemove to ensure exact match
-            await updateDoc(userRef, {
-                activeSideQuests: arrayRemove(quest),
-                completedQuests: arrayUnion(quest)
-            });
-            
-            setIsCompleted(true);
-        } catch (error) {
-            console.error("Error completing quest:", error);
-        }
-    };
-
     return (
         <div className="bg-[#1F1225] relative group">
             {/* Angular cuts using pseudo-elements */}
@@ -86,9 +64,7 @@ export default function SideQuest({ title, description, reward, quest }) {
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            if (!isCompleted) {
-                                handleComplete();
-                            }
+                            setIsCompleted(!isCompleted);
                         }}
                         className={`px-4 py-2 font-semibold transition-all duration-300 font-mono relative hover:scale-105
                             ${isCompleted 
