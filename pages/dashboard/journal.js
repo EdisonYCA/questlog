@@ -1,10 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/landing/Navbar';
+import { addJournalEntry } from '@/backend/database';
+import { getUserUID } from '@/backend/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '@/library/firebaseConfig';
 
 export default function Journal() {
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [newEntry, setNewEntry] = useState({ title: '', body: '' });
   const [entries, setEntries] = useState([]);
+
+  // Load existing entries when the page loads
+  useEffect(() => {
+    const loadEntries = async () => {
+      const uid = getUserUID();
+      if (!uid) return;
+
+      const userRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userRef);
+      
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        setEntries(userData.journals || []);
+      }
+    };
+
+    loadEntries();
+  }, []);
 
   const formatText = (text) => {
     return text.split('\n').map((line, i) => (
@@ -15,7 +37,7 @@ export default function Journal() {
     ));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (newEntry.title.trim() === '' && newEntry.body.trim() === '') return;
     
     const currentDate = new Date().toLocaleDateString('en-US', {
@@ -31,9 +53,18 @@ export default function Journal() {
       date: currentDate
     };
 
-    setEntries([newEntryObj, ...entries]);
-    setNewEntry({ title: '', body: '' });
-    setIsEntryOpen(false);
+    try {
+      // Save to database
+      await addJournalEntry([newEntryObj]);
+      
+      // Update local state
+      setEntries([newEntryObj, ...entries]);
+      setNewEntry({ title: '', body: '' });
+      setIsEntryOpen(false);
+    } catch (error) {
+      console.error('Error saving journal entry:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   // Group entries by date
