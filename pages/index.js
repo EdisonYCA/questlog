@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from 'next/link';
+import styled from "styled-components";
+import Navbar from "@/components/landing/Navbar";
+import Image from "next/image";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,30 +15,68 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   return (
-    <main className={`min-h-screen text-white ${geistSans.variable}`}>
-      {/* Navigation */}
-      <nav className="p-4 flex gap-8 text-2xl">
-        <Link href="/journal" className="text-pink-500 hover:text-pink-400">Journal</Link>
-        <Link href="/calendar" className="text-pink-500 hover:text-pink-400">Calendar</Link>
-        <Link href="/quests" className="text-pink-500 hover:text-pink-400">Quests</Link>
-        <div className="ml-auto">
-          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
-        </div>
-      </nav>
+    <>
+      <Navbar />
+      <HomePageContainer>
+        <HeroSection className="relative flex items-center justify-center">
+          <HeroImgWrapper>
+            <Image 
+              src="/images/ffflurry.svg"
+              alt="Hero Background"
+              layout="fill"
+              objectFit="cover"
+              priority
+            />
+          </HeroImgWrapper>
 
-      {/* Hero Section */}
-      <div className="max-w-4xl mx-auto p-4 mt-20 text-center">
-        <h1 className="text-6xl font-bold mb-6">Welcome to QuestLog</h1>
-        <p className="text-xl text-gray-300 mb-8">Track your journey, plan your adventures, and chronicle your achievements.</p>
-        <div className="flex gap-4 justify-center">
-          <Link 
-            href="/journal" 
-            className="bg-[#4A2B3A] text-white px-8 py-4 rounded-lg text-xl hover:bg-[#5A3B4A] transition-colors"
-          >
-            Start Journaling
-          </Link>
-        </div>
-      </div>
-    </main>
+          <TitleAndButton className="absolute z-10 flex flex-col items-center text-center">
+            <HeroTitle className="text-6xl font-bold">
+              Turn everyday routines into epic adventures with our AI-powered journal.
+            </HeroTitle>
+            <button className="mt-5 flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+              Try QuestLog
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
+          </TitleAndButton>
+        </HeroSection>
+      </HomePageContainer>
+    </>
   );
 }
+
+const HomePageContainer = styled.div`
+  width: 100vw;
+  height: 100vh;
+  background-color: #150a18;
+`;
+
+const HeroSection = styled.section`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const TitleAndButton = styled.div`
+  width: 60%;
+  max-width: 700px;
+  padding: 30px;
+`;
+
+const HeroTitle = styled.h1`
+  color: #DF2A88;
+  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+  line-height: 1.3;
+`;
+
+const HeroImgWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+`;
