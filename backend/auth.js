@@ -1,7 +1,10 @@
-import { auth } from "@/library/firebaseConfig";
+import { auth, db } from "@/library/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { initUserEntry } from "@/backend/database";
 
+export const getUserUID = () => {
+  return auth.currentUser.uid;
+}
 
 export const signUpUser = (email, password, setUser) => {
   return createUserWithEmailAndPassword(auth, email, password)
@@ -27,21 +30,14 @@ export const logUserIn = (email, password) => {
   return signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      return true;
+      return user;
     })
     .catch((error) => {
-      // Handle specific error cases
-      if (error.code === 'auth/invalid-credential') {
-        throw new Error('Invalid email or password. Please try again.');
-      }
       if (error.code === 'auth/user-not-found') {
         throw new Error('No account found with this email. Please sign up first.');
       }
       if (error.code === 'auth/wrong-password') {
         throw new Error('Incorrect password. Please try again.');
-      }
-      if (error.code === 'auth/invalid-email') {
-        throw new Error('Please enter a valid email address.');
       }
       throw error;
     });
