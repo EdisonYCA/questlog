@@ -67,7 +67,16 @@ Generate exactly 1 quest in the following JSON format:
       messages: [
         {
           role: "system",
-          content: "You are a helpful AI assistant that generates personalized quests based on journal entries. Always follow the exact formatting rules specified in the prompt."
+          content: `You are a personal development AI assistant. Based on the journal entires, provide main quests that most align with the users usual task
+          Format each quest as a JSON object with the following structure:
+            {
+                "title": "Quest title",
+                "description": "Detailed quest description",
+                "reward": "Reward description (e.g., '50 DATA FRAGMENTS')"
+                "time": "Time to complete quest (e.g., '1 hour', '30 minutes')"
+                "difficulty": "Main quest or side quest"
+            }
+          Return an array of these quest objects.`
         },
         {
           role: "user",
@@ -75,7 +84,7 @@ Generate exactly 1 quest in the following JSON format:
         }
       ],
       temperature: 0.7,
-      max_tokens: 500
+      max_tokens: 500,
     });
 
     // Parse the response to ensure it's valid JSON
