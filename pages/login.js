@@ -24,7 +24,7 @@ export default function login() {
 
     try {
       await logUserIn(email, password);
-      router.push("/dashboard")
+      router.push("/journal")
     } catch (err) {
       setError(true);
       console.log(err)
