@@ -39,7 +39,7 @@ export default function signup() {
 
     try {
       await signUpUser(email, password, setUser);
-      router.push("/interests");
+      router.push("/dashboard/interests");
     } catch (err) {
       setError(err.message);
     }
