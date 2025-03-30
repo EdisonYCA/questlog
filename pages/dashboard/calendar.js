@@ -1,13 +1,9 @@
 // pages/calendar.js
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import WeeklyCalendar from "../../components/calendar/calendar";
 import Navbar from "@/components/landing/Navbar";
-import { useStateContext } from '@/context/StateContext';
-import { useRouter } from 'next/router';
-
-
-
-
+import { useStateContext } from "@/context/StateContext";
+import { useRouter } from "next/router";
 
 // Navigation links (taken from your Journal component)
 const navigation = [
@@ -21,7 +17,7 @@ export default function CalendarPage() {
   const router = useRouter();
   useEffect(() => {
     if (!user) {
-      router.push('/login');
+      router.push("/login");
     }
   }, [user]);
 
