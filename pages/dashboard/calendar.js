@@ -1,5 +1,5 @@
 // pages/calendar.js
-import WeeklyCalendar from "../components/calendar/calendar";
+import WeeklyCalendar from "../../components/calendar/calendar";
 
 export default function CalendarPage() {
   return (
