@@ -56,12 +56,15 @@ export default function InterestsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center px-4 py-16">
-      <div className="max-w-2xl w-full">
-        <h1 className="text-5xl font-bold text-black mb-4">
+    <div className="min-h-screen bg-[#0D0D0F] flex flex-col items-center px-4 py-16 relative">
+      {/* Gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] to-[#0D0D0F] pointer-events-none" />
+      
+      <div className="max-w-2xl w-full relative z-10">
+        <h1 className="text-5xl font-bold text-white mb-4 font-mono">
           What interests you?
         </h1>
-        <p className="text-2xl text-gray-600 mb-5">
+        <p className="text-2xl text-[#8A8A8A] mb-5 font-mono">
           Select all the topics you're interested in.
         </p>
 
@@ -70,18 +73,18 @@ export default function InterestsPage() {
             <button
               key={topic}
               onClick={() => toggleTopic(topic)}
-              className={`px-6 py-3 rounded-full text-lg font-medium transition-all duration-200
+              className={`px-6 py-3 rounded-full text-lg font-medium transition-all duration-300
                 ${selectedTopics.includes(topic)
-                  ? 'bg-blue-600 text-white shadow-lg scale-105'
-                  : 'bg-white text-black shadow-md hover:shadow-lg hover:scale-105'
-                } border border-gray-200`}
+                  ? 'bg-gradient-to-r from-[#FF2E63] to-[#7B2DFF] text-white shadow-[0_0_20px_rgba(255,46,99,0.3)] scale-105'
+                  : 'bg-[rgba(26,26,46,0.7)] text-white border border-[rgba(8,247,254,0.3)] hover:shadow-[0_0_15px_rgba(8,247,254,0.2)] hover:scale-105'
+                }`}
             >
               {topic}
             </button>
           ))}
         </div>
 
-        <p className="text-2xl text-gray-600 mb-5">
+        <p className="text-2xl text-[#8A8A8A] mb-5 font-mono">
           Select what style of game you want to play.
         </p>
 
@@ -90,11 +93,11 @@ export default function InterestsPage() {
             <button
               key={genre}
               onClick={() => toggleGenre(genre)}
-              className={`px-6 py-3 rounded-full text-lg font-medium transition-all duration-200
+              className={`px-6 py-3 rounded-full text-lg font-medium transition-all duration-300
                 ${selectedGenres.includes(genre)
-                  ? 'bg-blue-600 text-white shadow-lg scale-105'
-                  : 'bg-white text-black shadow-md hover:shadow-lg hover:scale-105'
-                } border border-gray-200`}
+                  ? 'bg-gradient-to-r from-[#08F7FE] to-[#7B2DFF] text-white shadow-[0_0_20px_rgba(8,247,254,0.3)] scale-105'
+                  : 'bg-[rgba(26,26,46,0.7)] text-white border border-[rgba(8,247,254,0.3)] hover:shadow-[0_0_15px_rgba(8,247,254,0.2)] hover:scale-105'
+                }`}
             >
               {genre}
             </button>
@@ -103,10 +106,10 @@ export default function InterestsPage() {
 
         <button
           onClick={handleContinue}
-          className={`w-full py-4 rounded-full text-xl font-semibold transition-all duration-200
+          className={`w-full py-4 rounded-full text-xl font-semibold transition-all duration-300 font-mono
             ${selectedTopics.length > 0 && selectedGenres.length > 0
-              ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-xl hover:scale-[1.02] shadow-md'
-              : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+              ? 'bg-gradient-to-r from-[#FF2E63] to-[#7B2DFF] text-white hover:shadow-[0_0_30px_rgba(255,46,99,0.4)] hover:scale-[1.02]'
+              : 'bg-[rgba(26,26,46,0.7)] text-[#8A8A8A] cursor-not-allowed'
             }`}
         >
           Continue
