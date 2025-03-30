@@ -13,12 +13,14 @@ export default function TaskModal({
   isOpen,
   onClose,
   onSave,
+  onDelete,
   initialDate,
   initialStart,
   initialEnd,
   initialTitle,
   initialDescription,
   initialColor,
+  isEditing,
 }) {
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
@@ -26,6 +28,18 @@ export default function TaskModal({
   const [endTime, setEndTime] = useState("");
   const [description, setDescription] = useState("");
   const [color, setColor] = useState("#ec4899"); // default pink
+
+  const handleSave = () => {
+    onSave({ title, date, startTime, endTime, description, color });
+    onClose();
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSave();
+    }
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -35,6 +49,8 @@ export default function TaskModal({
       setStartTime(initialStart ?? "");
       setEndTime(initialEnd ?? "");
       setColor(initialColor ?? "#ec4899");
+      window.addEventListener('keydown', handleKeyPress);
+      return () => window.removeEventListener('keydown', handleKeyPress);
     }
   }, [
     isOpen,
@@ -44,13 +60,19 @@ export default function TaskModal({
     initialTitle,
     initialDescription,
     initialColor,
+    title,
+    date,
+    startTime,
+    endTime,
+    description,
+    color,
   ]);
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
-      <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md space-y-4">
+      <div className="bg-gray-900 text-white p-6 rounded-2xl shadow-xl w-full max-w-md space-y-4" onKeyDown={handleKeyPress}>
         <h2 className="text-xl font-bold">Add Task</h2>
 
         <div className="space-y-2">
@@ -117,6 +139,17 @@ export default function TaskModal({
 
         {/* Bottom buttons */}
         <div className="flex justify-end gap-2 mt-4">
+          {isEditing && (
+            <button
+              onClick={() => {
+                onDelete();
+                onClose();
+              }}
+              className="px-4 py-2 bg-red-600 rounded hover:bg-red-500"
+            >
+              Delete
+            </button>
+          )}
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
@@ -124,10 +157,7 @@ export default function TaskModal({
             Cancel
           </button>
           <button
-            onClick={() => {
-              onSave({ title, date, startTime, endTime, description, color });
-              onClose();
-            }}
+            onClick={handleSave}
             className="px-4 py-2 bg-pink-600 rounded hover:bg-pink-500"
           >
             Save Task
@@ -137,3 +167,5 @@ export default function TaskModal({
     </div>
   );
 }
+
+//testing
