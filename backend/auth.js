@@ -2,6 +2,10 @@ import { auth, db } from "@/library/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { initUserEntry } from "@/backend/database";
 
+export const getUserUID = () => {
+  return auth.currentUser.uid;
+}
+
 export const signUpUser = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -11,7 +15,6 @@ export const signUpUser = (email, password) => {
       return true;
     })
     .catch((error) => {
-    // TODO: handle errors
       const errorCode = error.code;
       const errorMessage = error.message;
       return false;
