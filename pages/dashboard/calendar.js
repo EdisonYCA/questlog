@@ -1,6 +1,9 @@
 // pages/calendar.js
+import { useState, useEffect } from "react";
 import WeeklyCalendar from "../../components/calendar/calendar";
 import Navbar from "@/components/landing/Navbar";
+import { useStateContext } from "@/context/StateContext";
+import { useRouter } from "next/router";
 
 // Navigation links (taken from your Journal component)
 const navigation = [
@@ -10,6 +13,14 @@ const navigation = [
 ];
 
 export default function CalendarPage() {
+  const { user } = useStateContext();
+  const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user]);
+
   return (
     <main className="min-h-screen bg-[#150A18] text-white relative">
       {/* Background grid with diagonal lines */}

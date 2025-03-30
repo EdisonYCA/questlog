@@ -7,10 +7,12 @@ import {
   MenuItem,
   MenuItems,
 } from "@headlessui/react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Bars3Icon, XMarkIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { useStateContext } from "@/context/StateContext";
+import { auth } from "@/library/firebaseConfig";
+import { signOut } from "firebase/auth";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -18,14 +20,31 @@ function classNames(...classes) {
 
 export default function Navbar({navLinks}) {
   const pathname = usePathname();
+  const { user, setUser } = useStateContext();
+  
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
+  const filteredNavLinks = navLinks.filter(link => {
+    if (user) {
+      return !['Login', 'Sign Up'].includes(link.name);
+    }
+    return true;
+  });
   
   return (
     <>
-      <Disclosure as="nav" className="bg-transparent">
+      <Disclosure as="nav" className="bg-[#150A18]">
         <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
           <div className="relative flex h-20 items-center justify-between">
             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-[#DF2A88] hover:text-[#DF2A88] focus:ring-2 focus:ring-pink-500 focus:outline-hidden focus:ring-inset">
+              <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-[#FF2E63] hover:text-[#FF2E63] focus:ring-2 focus:ring-[#FF2E63] focus:outline-hidden focus:ring-inset">
                 <span className="absolute -inset-0.5" />
                 <span className="sr-only">Open main menu</span>
                 <Bars3Icon
@@ -38,28 +57,18 @@ export default function Navbar({navLinks}) {
                 />
               </DisclosureButton>
             </div>
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <div className="flex shrink-0 items-center">
-                <Image
-                  alt="QuestLog Logo"
-                  src="/images/logo.svg"
-                  className="h-12 w-auto"
-                  width={48}
-                  height={48}
-                  priority
-                />
-              </div>
+            <div className="flex flex-1 items-center sm:items-stretch sm:justify-end">
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-8">
-                  {navLinks.map((item) => (
+                  {filteredNavLinks.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}
                       className={classNames(
                         pathname === item.href
-                          ? "text-[#DF2A88] border-b-2 border-[#DF2A88]"
-                          : "text-[#DF2A88] hover:text-[#DF2A88] hover:border-b-2 hover:border-[#DF2A88]",
-                        "px-4 py-2 text-xl font-medium transition-all duration-200 cursor-pointer"
+                          ? "text-[#FF2E63] border-b-2 border-[#FF2E63]"
+                          : "text-[#FF2E63] hover:text-[#FF2E63] hover:border-b-2 hover:border-[#FF2E63]",
+                        "px-4 py-2 text-xl font-medium transition-all duration-200 cursor-pointer font-mono"
                       )}
                     >
                       {item.name}
@@ -68,21 +77,53 @@ export default function Navbar({navLinks}) {
                 </div>
               </div>
             </div>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+              {user ? (
+                <Menu as="div" className="relative ml-3">
+                  <MenuButton className="flex rounded-full bg-[#1F1225] text-sm focus:outline-none focus:ring-2 focus:ring-[#FF2E63] focus:ring-offset-2 focus:ring-offset-[#150A18]">
+                    <span className="sr-only">Open user menu</span>
+                    <UserCircleIcon className="h-8 w-8 text-[#FF2E63]" />
+                  </MenuButton>
+                  <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-[#1F1225] py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <MenuItem>
+                      {({ active }) => (
+                        <Link
+                          href="/dashboard/journal"
+                          className={classNames(active ? 'bg-[#FF2E63]/10' : '', 'block px-4 py-2 text-sm text-[#FF2E63] font-mono')}
+                        >
+                          Dashboard
+                        </Link>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ active }) => (
+                        <button
+                          onClick={handleSignOut}
+                          className={classNames(active ? 'bg-[#FF2E63]/10' : '', 'block w-full text-left px-4 py-2 text-sm text-[#FF2E63] font-mono')}
+                        >
+                          Sign out
+                        </button>
+                      )}
+                    </MenuItem>
+                  </MenuItems>
+                </Menu>
+              ) : null}
+            </div>
           </div>
         </div>
 
-        <DisclosurePanel className="sm:hidden bg-transparent">
+        <DisclosurePanel className="sm:hidden bg-[#150A18]">
           <div className="space-y-1 px-2 pt-2 pb-3">
-            {navLinks.map((item) => (
+            {filteredNavLinks.map((item) => (
               <DisclosureButton
                 key={item.name}
                 as={Link}
                 href={item.href}
                 className={classNames(
                   pathname === item.href
-                    ? "text-[#DF2A88] border-b-2 border-[#DF2A88]"
-                    : "text-[#DF2A88] hover:text-[#DF2A88] hover:border-b-2 hover:border-[#DF2A88]",
-                  "block px-4 py-3 text-xl font-medium transition-all duration-200 cursor-pointer"
+                    ? "text-[#FF2E63] border-b-2 border-[#FF2E63]"
+                    : "text-[#FF2E63] hover:text-[#FF2E63] hover:border-b-2 hover:border-[#FF2E63]",
+                  "block px-4 py-3 text-xl font-medium transition-all duration-200 cursor-pointer font-mono"
                 )}
               >
                 {item.name}

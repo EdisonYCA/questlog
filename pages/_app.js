@@ -1,18 +1,18 @@
 import { Inter } from "next/font/google";
 import "@/styles/globals.css";
-import { StateContext } from "@/context/StateContent";
 import { AuthContextProvider } from "@/context/AuthContext";
+import { StateProvider } from '@/context/StateContext';
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }) {
   return (
     <AuthContextProvider>
-      <StateContext>
+      <StateProvider>
         <main className={inter.className}>
           <Component {...pageProps} />
         </main>
-      </StateContext>
+      </StateProvider>
     </AuthContextProvider>
   );
 }
