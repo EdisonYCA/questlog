@@ -27,7 +27,7 @@ export default function TaskModal({
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
   const [description, setDescription] = useState("");
-  const [color, setColor] = useState("#f59e0b"); // default yellow instead of pink
+  const [color, setColor] = useState("#f59e0b"); // default yellow
 
   const handleSave = () => {
     onSave({ title, date, startTime, endTime, description, color });
@@ -48,7 +48,7 @@ export default function TaskModal({
       setDate(initialDate ?? "");
       setStartTime(initialStart ?? "");
       setEndTime(initialEnd ?? "");
-      setColor(initialColor ?? "#f59e0b"); // default to yellow instead of pink
+      setColor(initialColor ?? "#f59e0b");
       window.addEventListener('keydown', handleKeyPress);
       return () => window.removeEventListener('keydown', handleKeyPress);
     }
