@@ -1,7 +1,6 @@
 import MainQuest from "../components/MainQuest";
 import LevelIndicator from "@/components/LevelIndicator";
 import SideQuest from "@/components/SideQuest";
-import Typed from "react-typed";
 
 
 // dummmy data for now 
