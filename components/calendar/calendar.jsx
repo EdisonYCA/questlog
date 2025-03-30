@@ -16,7 +16,7 @@ export default function WeeklyCalendar() {
       start: "2025-03-29T10:00:00",
       end: "2025-03-29T11:00:00",
       description: "A sample task",
-      backgroundColor: "#10b981", // ✅ was "color"
+      backgroundColor: "#10b981", 
     },
   ]);
   
@@ -34,7 +34,7 @@ export default function WeeklyCalendar() {
       end: info.allDay ? "09:00" : formatTime(end),
     });
 
-    setEditingEvent(null); // creating new task
+    setEditingEvent(null); 
     setModalOpen(true);
   };
 
@@ -91,13 +91,20 @@ export default function WeeklyCalendar() {
     setModalOpen(false);
   };
 
+  const handleDelete = () => {
+    if (editingEvent?.id) {
+      setEvents((prev) => prev.filter((ev) => ev.id !== editingEvent.id));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-mono p-6">
-      <h1 className="text-4xl font-bold text-pink-500 mb-6 drop-shadow-[0_0_8px_rgba(255,0,255,0.8)] text-center">
+      <h1 className="text-4xl font-bold text-cyan-500 mb-6 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] text-center">
         QuestLog Scheduler
       </h1>
 
-      <div className="bg-gray-950 rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,255,0.3)] border border-pink-600">
+
+      <div className="bg-gray-950 rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,255,0.3)] border border-cyan-600">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
@@ -129,13 +136,70 @@ export default function WeeklyCalendar() {
           setEditingEvent(null);
         }}
         onSave={handleSave}
+        onDelete={handleDelete}
         initialDate={editingEvent?.date || selectedInfo?.date}
         initialStart={editingEvent?.start || selectedInfo?.start}
         initialEnd={editingEvent?.end || selectedInfo?.end}
         initialTitle={editingEvent?.title || ""}
         initialDescription={editingEvent?.description || ""}
         initialColor={editingEvent?.color || "#ec4899"}
+        isEditing={!!editingEvent}
       />
+      
+      {/* Global holographic hover effect for calendar cells */}
+      <style jsx global>{`
+        /* Day Grid hover effect */
+        .fc-daygrid-day {
+          position: relative;
+          overflow: hidden;
+        }
+        .fc-daygrid-day::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 255, 255, 0.4);
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 1s ease;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .fc-daygrid-day:hover::before {
+          transform: scaleX(1);
+        }
+
+        /* Time Grid hover effect */
+        .fc-timegrid-slot {
+          position: relative;
+          overflow: hidden;
+        }
+        .fc-timegrid-slot::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            45deg,
+            rgba(0, 255, 255, 0.2),
+            rgba(0, 255, 255, 0.4),
+            rgba(0, 255, 255, 0.2)
+          );
+          transform: translateY(-100%);
+          transition: transform 0.3s ease;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .fc-timegrid-slot:hover::before {
+          transform: translateY(0);
+        }
+      `}</style>  test
     </div>
   );
 }
+
+// testing
