@@ -1,6 +1,5 @@
 import { doc, setDoc, updateDoc, arrayUnion, arrayRemove, serverTimestamp, getDoc, collection, query, where, getDocs } from "firebase/firestore";
 import { db } from "@/library/firebaseConfig";
-import { getUserUID } from "@/backend/auth";
 
 const updateUserData = async (uid, data) => {
   const userRef = doc(db, "users", uid);
@@ -67,7 +66,7 @@ export const addJournalEntry = async (uid, entry) => {
       title: entry.title,
       body: entry.body,
       date: currentDate,
-      timestamp: new Date().toISOString(),
+      timestamp: serverTimestamp(),
     };
 
     await updateDoc(userRef, {

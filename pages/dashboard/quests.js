@@ -98,6 +98,7 @@ export default function QuestsPage() {
                       description={quest.description}
                       timeframe={quest.timeframe}
                       reward={quest.reward}
+                      quest={quest}
                     />
                   ))
                 ) : (
@@ -123,6 +124,7 @@ export default function QuestsPage() {
                       title={quest.title}
                       description={quest.description}
                       reward={quest.reward}
+                      quest={quest}
                     />
                   ))
                 ) : (
