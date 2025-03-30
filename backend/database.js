@@ -1,4 +1,11 @@
-import { doc, setDoc, updateDoc, arrayUnion, arrayRemove, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+  serverTimestamp,
+} from "firebase/firestore";
 import { db } from "@/library/firebaseConfig";
 import { getUserUID } from "@/backend/auth";
 // Helper function to update user document data

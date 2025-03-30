@@ -2,7 +2,7 @@ import Navbar from "@/components/landing/Navbar";
 import { useState } from "react";
 import { signUpUser } from "@/backend/auth";
 import { useRouter } from "next/router";
-import { useStateContext } from "@/context/StateContent";
+import { useStateContext } from "@/context/StateContext";
 
 export default function signup() {
   const [email, setEmail] = useState("");

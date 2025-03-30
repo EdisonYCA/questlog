@@ -1,5 +1,8 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
+import { useStateContext } from '@/context/StateContext';
+import { useState, useEffect } from 'react';
+
+
 
 const topics = [
   "Technology",
@@ -26,6 +29,8 @@ const genres = [
 ];
 
 export default function InterestsPage() {
+
+
   const [selectedTopics, setSelectedTopics] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const router = useRouter();
@@ -47,6 +52,8 @@ export default function InterestsPage() {
   };
 
   const handleContinue = () => {
+    
+    
     if (selectedTopics.length > 0 && selectedGenres.length > 0) {
       // Here you would typically save the selected topics to your backend/database
       console.log('Selected topics:', selectedTopics);
@@ -54,6 +61,12 @@ export default function InterestsPage() {
       router.push('/dashboard/journal'); 
     }
   };
+  const { user } = useStateContext();
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user]);
 
   return (
     <div className="min-h-screen bg-[#0D0D0F] flex flex-col items-center px-4 py-16 relative">
