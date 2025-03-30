@@ -11,10 +11,12 @@ const navigation = [
 
 export default function CalendarPage() {
   return (
-    <main className="min-h-screen bg-[#150A18] text-white">
+    <main className="min-h-screen bg-[#150A18] text-white relative">
+      {/* Background grid with diagonal lines */}
+      <div className="fixed inset-0 bg-[linear-gradient(#711142_1px,transparent_1px),linear-gradient(90deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-10" />
+      <div className="fixed inset-0 bg-[linear-gradient(45deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-5" />
       <Navbar navLinks={navigation} />
       <div className="max-w-7xl mx-auto px-8 py-8">
-        <h1 className="text-3xl font-bold mb-6">Calendar</h1>
         <WeeklyCalendar />
       </div>
     </main>

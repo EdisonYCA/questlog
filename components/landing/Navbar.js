@@ -8,6 +8,8 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 
 function classNames(...classes) {
@@ -15,9 +17,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar({navLinks}) {
-  const navigation = [
-    ...navLinks,
-  ];
+  const pathname = usePathname();
   
   return (
     <>
@@ -51,20 +51,19 @@ export default function Navbar({navLinks}) {
               </div>
               <div className="hidden sm:ml-6 sm:block">
                 <div className="flex space-x-8">
-                  {navigation.map((item) => (
-                    <a
+                  {navLinks.map((item) => (
+                    <Link
                       key={item.name}
                       href={item.href}
-                      aria-current={item.current ? "page" : undefined}
                       className={classNames(
-                        item.current
+                        pathname === item.href
                           ? "text-[#DF2A88] border-b-2 border-[#DF2A88]"
                           : "text-[#DF2A88] hover:text-[#DF2A88] hover:border-b-2 hover:border-[#DF2A88]",
-                        "px-4 py-2 text-xl font-medium transition-all duration-200"
+                        "px-4 py-2 text-xl font-medium transition-all duration-200 cursor-pointer"
                       )}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -74,17 +73,16 @@ export default function Navbar({navLinks}) {
 
         <DisclosurePanel className="sm:hidden bg-transparent">
           <div className="space-y-1 px-2 pt-2 pb-3">
-            {navigation.map((item) => (
+            {navLinks.map((item) => (
               <DisclosureButton
                 key={item.name}
-                as="a"
+                as={Link}
                 href={item.href}
-                aria-current={item.current ? "page" : undefined}
                 className={classNames(
-                  item.current
+                  pathname === item.href
                     ? "text-[#DF2A88] border-b-2 border-[#DF2A88]"
                     : "text-[#DF2A88] hover:text-[#DF2A88] hover:border-b-2 hover:border-[#DF2A88]",
-                  "block px-4 py-3 text-xl font-medium transition-all duration-200"
+                  "block px-4 py-3 text-xl font-medium transition-all duration-200 cursor-pointer"
                 )}
               >
                 {item.name}
