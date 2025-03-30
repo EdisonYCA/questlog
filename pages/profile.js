@@ -38,12 +38,13 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0F] text-white relative">
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#1A1A2E] to-[#0D0D0F] pointer-events-none" />
+    <div className="min-h-screen bg-[#150A18] text-white relative">
+      {/* Background grid with diagonal lines */}
+      <div className="fixed inset-0 bg-[linear-gradient(#711142_1px,transparent_1px),linear-gradient(90deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-10" />
+      <div className="fixed inset-0 bg-[linear-gradient(45deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-5" />
 
       {/* Navigation */}
-      <nav className="relative z-10 border-b border-[rgba(8,247,254,0.2)] bg-[rgba(26,26,46,0.5)] backdrop-blur-md">
+      <nav className="relative z-10 border-b border-[#08F7FE]/20 bg-[#1F1225]/50 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-12">
@@ -65,9 +66,17 @@ export default function ProfilePage() {
       <main className="relative z-10 max-w-7xl mx-auto px-4 py-8">
         {/* Profile Header */}
         <div className="flex flex-col items-center mb-12">
-          <div className="w-32 h-32 rounded-full bg-gradient-to-r from-[#FF2E63] to-[#7B2DFF] p-1">
-            <div className="w-full h-full rounded-full bg-[#1A1A2E] flex items-center justify-center">
-              <span className="text-4xl">👤</span>
+          <div className="w-32 h-32 relative">
+            {/* Angular cuts for profile picture */}
+            <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#FF2E63]" />
+            <div className="absolute -top-[2px] -right-[2px] w-4 h-4 border-t-2 border-r-2 border-[#FF2E63]" />
+            <div className="absolute -bottom-[2px] -left-[2px] w-4 h-4 border-b-2 border-l-2 border-[#FF2E63]" />
+            <div className="absolute -bottom-[2px] -right-[2px] w-4 h-4 border-b-2 border-r-2 border-[#FF2E63]" />
+            
+            <div className="w-full h-full bg-gradient-to-r from-[#FF2E63] to-[#08F7FE] p-1">
+              <div className="w-full h-full bg-[#1F1225] flex items-center justify-center">
+                <span className="text-4xl">👤</span>
+              </div>
             </div>
           </div>
           <h1 className="mt-4 text-2xl font-bold font-mono text-white">User Name</h1>
@@ -76,95 +85,152 @@ export default function ProfilePage() {
         {/* Stats and Rank Section */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {/* Stats Card */}
-          <div className="bg-[rgba(26,26,46,0.7)] rounded-xl p-6 border border-[rgba(8,247,254,0.2)] backdrop-blur-md">
-            <h2 className="text-xl font-mono text-[#08F7FE] mb-4">Stats</h2>
-            <div className="space-y-3">
-              <p className="font-mono text-[#8A8A8A]">Current Streak: <span className="text-white">85</span></p>
-              <p className="font-mono text-[#8A8A8A]">Longest Streak: <span className="text-white">108</span></p>
-              <p className="font-mono text-[#8A8A8A]">Friend Rank: <span className="text-white">4</span></p>
-              <p className="font-mono text-[#8A8A8A]">Quests Completed: <span className="text-white">82</span></p>
+          <div className="bg-[#1F1225] relative group">
+            {/* Angular cuts */}
+            <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#08F7FE]" />
+            <div className="absolute -top-[2px] -right-[2px] w-4 h-4 border-t-2 border-r-2 border-[#08F7FE]" />
+            <div className="absolute -bottom-[2px] -left-[2px] w-4 h-4 border-b-2 border-l-2 border-[#08F7FE]" />
+            <div className="absolute -bottom-[2px] -right-[2px] w-4 h-4 border-b-2 border-r-2 border-[#08F7FE]" />
+            
+            {/* Decorative lines */}
+            <div className="absolute top-0 right-0 w-24 h-[1px] bg-gradient-to-l from-[#08F7FE] to-transparent" />
+            <div className="absolute bottom-0 left-0 w-24 h-[1px] bg-gradient-to-r from-[#08F7FE] to-transparent" />
+
+            <div className="p-6 relative z-10">
+              <h2 className="text-xl font-mono text-[#08F7FE] mb-4">Stats</h2>
+              <div className="space-y-3">
+                <p className="font-mono text-[#8A8A8A]">Current Streak: <span className="text-white">85</span></p>
+                <p className="font-mono text-[#8A8A8A]">Longest Streak: <span className="text-white">108</span></p>
+                <p className="font-mono text-[#8A8A8A]">Friend Rank: <span className="text-white">4</span></p>
+                <p className="font-mono text-[#8A8A8A]">Quests Completed: <span className="text-white">82</span></p>
+              </div>
             </div>
           </div>
 
           {/* Current Rank */}
-          <div className="bg-[rgba(26,26,46,0.7)] rounded-xl p-6 border border-[rgba(8,247,254,0.2)] backdrop-blur-md flex flex-col items-center justify-center">
-            <h2 className="text-xl font-mono text-[#08F7FE] mb-4">Current Rank</h2>
-            <div className="w-24 h-24 bg-gradient-to-r from-[#FF2E63] to-[#7B2DFF] rounded-lg flex items-center justify-center">
-              <span className="text-4xl font-bold">{currentLevel}</span>
-            </div>
-            <p className="mt-4 font-mono text-[#FFD300]">CYBER KNIGHT</p>
+          <div className="bg-[#1F1225] relative group">
+            {/* Angular cuts */}
+            <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#FF2E63]" />
+            <div className="absolute -top-[2px] -right-[2px] w-4 h-4 border-t-2 border-r-2 border-[#FF2E63]" />
+            <div className="absolute -bottom-[2px] -left-[2px] w-4 h-4 border-b-2 border-l-2 border-[#FF2E63]" />
+            <div className="absolute -bottom-[2px] -right-[2px] w-4 h-4 border-b-2 border-r-2 border-[#FF2E63]" />
             
-            {/* XP Progress Section */}
-            <div className="w-full mt-4">
-              <div className="flex justify-between text-sm font-mono mb-2">
-                <span className="text-[#8A8A8A]">XP: {currentXP}</span>
-                <span className="text-[#8A8A8A]">Next: {nextRankXP}</span>
-              </div>
-              <div className="h-2 bg-[rgba(8,247,254,0.1)] rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-[#FF2E63] to-[#7B2DFF] transition-all duration-300"
-                  style={{ width: `${xpProgress}%` }}
-                />
-              </div>
-              <div className="text-center mt-2">
-                <span className="text-sm font-mono text-[#8A8A8A]">
-                  {nextRankXP - currentXP} XP to next rank
-                </span>
+            {/* Decorative lines */}
+            <div className="absolute top-0 right-0 w-24 h-[1px] bg-gradient-to-l from-[#FF2E63] to-transparent" />
+            <div className="absolute bottom-0 left-0 w-24 h-[1px] bg-gradient-to-r from-[#FF2E63] to-transparent" />
+
+            <div className="p-6 relative z-10">
+              <h2 className="text-xl font-mono text-[#FF2E63] mb-4">Current Rank</h2>
+              <div className="text-4xl font-bold text-white mb-2">{currentLevel}</div>
+              <div className="text-[#FF2E63] font-mono">CYBER KNIGHT</div>
+              
+              {/* XP Progress */}
+              <div className="mt-4">
+                <div className="flex justify-between text-sm font-mono mb-2">
+                  <span className="text-[#08F7FE]">{currentXP} XP</span>
+                  <span className="text-[#FF2E63]">{nextRankXP} XP</span>
+                </div>
+                <div className="h-2 bg-[#1F1225] rounded-full overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-[#FF2E63] to-[#08F7FE] transition-all duration-1000"
+                    style={{ width: `${xpProgress}%` }}
+                  />
+                </div>
+                <div className="text-sm font-mono text-[#8A8A8A] mt-2">
+                  {nextRankXP - currentXP} XP until next rank
+                </div>
               </div>
             </div>
           </div>
 
           {/* Friend Rankings */}
-          <div className="bg-[rgba(26,26,46,0.7)] rounded-xl p-6 border border-[rgba(8,247,254,0.2)] backdrop-blur-md">
-            <h2 className="text-xl font-mono text-[#08F7FE] mb-4">Friend Rankings</h2>
-            <div className="space-y-3">
-              {friendRankings.map((friend, index) => (
-                <div key={friend.name} className="flex items-center justify-between">
-                  <span className="font-mono text-[#8A8A8A]">{friend.rank}. {friend.name}</span>
-                  <span className="font-mono text-[#FF2E63]">{friend.score}</span>
-                </div>
-              ))}
+          <div className="bg-[#1F1225] relative group">
+            {/* Angular cuts */}
+            <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#08F7FE]" />
+            <div className="absolute -top-[2px] -right-[2px] w-4 h-4 border-t-2 border-r-2 border-[#08F7FE]" />
+            <div className="absolute -bottom-[2px] -left-[2px] w-4 h-4 border-b-2 border-l-2 border-[#08F7FE]" />
+            <div className="absolute -bottom-[2px] -right-[2px] w-4 h-4 border-b-2 border-r-2 border-[#08F7FE]" />
+            
+            {/* Decorative lines */}
+            <div className="absolute top-0 right-0 w-24 h-[1px] bg-gradient-to-l from-[#08F7FE] to-transparent" />
+            <div className="absolute bottom-0 left-0 w-24 h-[1px] bg-gradient-to-r from-[#08F7FE] to-transparent" />
+
+            <div className="p-6 relative z-10">
+              <h2 className="text-xl font-mono text-[#08F7FE] mb-4">Friend Rankings</h2>
+              <div className="space-y-3">
+                {friendRankings.map((friend, index) => (
+                  <div key={friend.name} className="flex items-center justify-between">
+                    <span className="font-mono text-[#8A8A8A]">{friend.rank}. {friend.name}</span>
+                    <span className="font-mono text-[#FF2E63]">{friend.score}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Completed Quests Section */}
-        <div className="bg-[rgba(26,26,46,0.7)] rounded-xl p-6 border border-[rgba(8,247,254,0.2)] backdrop-blur-md">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-mono text-[#08F7FE]">Completed Quests</h2>
-            <span className="text-sm font-mono text-[#8A8A8A]">
-              Showing {Math.min(displayCount, completedQuests.length)} of {completedQuests.length}
-            </span>
-          </div>
+        <div className="bg-[#1F1225] relative group">
+          {/* Angular cuts */}
+          <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#FF2E63]" />
+          <div className="absolute -top-[2px] -right-[2px] w-4 h-4 border-t-2 border-r-2 border-[#FF2E63]" />
+          <div className="absolute -bottom-[2px] -left-[2px] w-4 h-4 border-b-2 border-l-2 border-[#FF2E63]" />
+          <div className="absolute -bottom-[2px] -right-[2px] w-4 h-4 border-b-2 border-r-2 border-[#FF2E63]" />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {completedQuests.slice(0, displayCount).map((quest) => (
-              <div 
-                key={quest.id}
-                className="bg-[rgba(13,13,15,0.7)] rounded-lg p-4 border border-[rgba(8,247,254,0.1)] hover:border-[rgba(8,247,254,0.3)] transition-all duration-300 hover:transform hover:scale-105"
-              >
-                <div className="text-sm font-mono text-[#FF2E63] mb-2">{quest.type}</div>
-                <h3 className="font-mono text-white mb-2">{quest.title}</h3>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-mono text-[#8A8A8A]">{quest.date}</span>
-                  <span className="text-sm font-mono text-[#08F7FE]">{quest.reward}</span>
+          {/* Decorative lines */}
+          <div className="absolute top-0 right-0 w-24 h-[1px] bg-gradient-to-l from-[#FF2E63] to-transparent" />
+          <div className="absolute bottom-0 left-0 w-24 h-[1px] bg-gradient-to-r from-[#FF2E63] to-transparent" />
+
+          <div className="p-6 relative z-10">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-mono text-[#FF2E63]">Completed Quests</h2>
+              <span className="text-sm font-mono text-[#8A8A8A]">
+                Showing {Math.min(displayCount, completedQuests.length)} of {completedQuests.length}
+              </span>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {completedQuests.slice(0, displayCount).map((quest) => (
+                <div 
+                  key={quest.id}
+                  className="bg-[#150A18] relative group/quest"
+                >
+                  {/* Angular cuts for quest card */}
+                  <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-[#08F7FE]" />
+                  <div className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-[#08F7FE]" />
+                  <div className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-[#08F7FE]" />
+                  <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-[#08F7FE]" />
+
+                  <div className="p-4">
+                    <div className="text-sm font-mono text-[#FF2E63] mb-2">{quest.type}</div>
+                    <h3 className="font-mono text-white mb-2">{quest.title}</h3>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm font-mono text-[#8A8A8A]">{quest.date}</span>
+                      <span className="text-sm font-mono text-[#08F7FE]">{quest.reward}</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+            
+            {displayCount < completedQuests.length && (
+              <button
+                onClick={loadMore}
+                className="mt-6 w-full py-4 font-mono text-[#08F7FE] relative group/button"
+              >
+                {/* Button angular cuts */}
+                <div className="absolute -top-[1px] -left-[1px] w-2 h-2 border-t border-l border-current" />
+                <div className="absolute -top-[1px] -right-[1px] w-2 h-2 border-t border-r border-current" />
+                <div className="absolute -bottom-[1px] -left-[1px] w-2 h-2 border-b border-l border-current" />
+                <div className="absolute -bottom-[1px] -right-[1px] w-2 h-2 border-b border-r border-current" />
+                
+                <div className="flex items-center justify-center gap-2">
+                  <span>Load More Quests</span>
+                  <span className="text-xl group-hover/button:translate-y-1 transition-transform duration-300">↓</span>
+                </div>
+              </button>
+            )}
           </div>
-          
-          {displayCount < completedQuests.length && (
-            <button
-              onClick={loadMore}
-              className="mt-6 w-full py-4 rounded-lg font-mono text-[#08F7FE] border-2 border-[rgba(8,247,254,0.3)] 
-                hover:bg-gradient-to-r hover:from-[rgba(8,247,254,0.1)] hover:to-transparent
-                hover:border-[#08F7FE] transition-all duration-300 flex items-center justify-center gap-2
-                group"
-            >
-              <span>Load More Quests</span>
-              <span className="text-xl group-hover:translate-y-1 transition-transform duration-300">↓</span>
-            </button>
-          )}
         </div>
       </main>
     </div>
