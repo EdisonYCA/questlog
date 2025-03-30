@@ -97,6 +97,16 @@ export default function Navbar({navLinks}) {
                     </MenuItem>
                     <MenuItem>
                       {({ active }) => (
+                        <Link
+                          href="/dashboard/profile"
+                          className={classNames(active ? 'bg-[#FF2E63]/10' : '', 'block px-4 py-2 text-sm text-[#FF2E63] font-mono')}
+                        >
+                          Profile
+                        </Link>
+                      )}
+                    </MenuItem>
+                    <MenuItem>
+                      {({ active }) => (
                         <button
                           onClick={handleSignOut}
                           className={classNames(active ? 'bg-[#FF2E63]/10' : '', 'block w-full text-left px-4 py-2 text-sm text-[#FF2E63] font-mono')}
