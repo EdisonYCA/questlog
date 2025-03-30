@@ -15,7 +15,6 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   const navigation = [
-    { name: "About", href: "/about", current: false },
     { name: "Login", href: "/login", current: false },
     { name: "Signup", href: "/signup", current: false },
   ]
