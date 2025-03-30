@@ -7,39 +7,49 @@ export default function signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const validateUserCredentials = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return (
-      emailRegex.test(email) &&
-      password.length > 0 &&
-      confirmPassword.length > 0 &&
-      password == confirmPassword
-    );
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+    return true;
   };
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!validateUserCredentials()) {
-      setError(true);
       return;
     }
 
     try {
       await signUpUser(email, password);
-      router.push("/journal")
+      router.push("/dashboard")
     } catch (err) {
-      setError(true);
-      console.log(err)
+      setError(err.message);
     }
   };
 
+  const navigation = [
+    { name: "Home", href: "/", current: false }
+    ]
+
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar navLinks={navigation}></Navbar>
       <div className="flex min-h-screen items-center justify-center bg-[#150A18]">
         <div className="w-full max-w-md p-8 bg-[#442A46] rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold text-center text-white">
@@ -101,7 +111,7 @@ export default function signup() {
 
           {error && (
             <p className="text-red-500 text-sm mt-2">
-              Invalid entry. Please check your input.
+              {error}
             </p>
           )}
 
@@ -121,7 +131,7 @@ export default function signup() {
           {/* Already Have an Account */}
           <p className="mt-4 text-center text-[#E0D6EB] text-sm">
             Already have an account?{" "}
-            <a href="#" className="text-[#3E5A8E] font-medium hover:underline">
+            <a href="/login" className="text-[#3E5A8E] font-medium hover:underline">
               Sign In
             </a>
           </p>

@@ -5,6 +5,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import TaskModal from "./TaskModal";
 
+
 export default function WeeklyCalendar() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
@@ -16,7 +17,7 @@ export default function WeeklyCalendar() {
       start: "2025-03-29T10:00:00",
       end: "2025-03-29T11:00:00",
       description: "A sample task",
-      backgroundColor: "#10b981", // ✅ was "color"
+      backgroundColor: "#10b981", 
     },
   ]);
   
@@ -34,7 +35,7 @@ export default function WeeklyCalendar() {
       end: info.allDay ? "09:00" : formatTime(end),
     });
 
-    setEditingEvent(null); // creating new task
+    setEditingEvent(null); 
     setModalOpen(true);
   };
 
@@ -50,7 +51,7 @@ export default function WeeklyCalendar() {
       start: formatTime(start),
       end: formatTime(end),
       description: event.extendedProps.description || "",
-      color: event.backgroundColor || event.color || "#ec4899",
+      color: event.backgroundColor || event.color || "#f59e0b",
     });
 
     setSelectedInfo(null); // not a new one
@@ -91,13 +92,20 @@ export default function WeeklyCalendar() {
     setModalOpen(false);
   };
 
+  const handleDelete = () => {
+    if (editingEvent?.id) {
+      setEvents((prev) => prev.filter((ev) => ev.id !== editingEvent.id));
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white font-mono p-6">
-      <h1 className="text-4xl font-bold text-pink-500 mb-6 drop-shadow-[0_0_8px_rgba(255,0,255,0.8)] text-center">
+      <h1 className="text-4xl font-bold text-cyan-500 mb-6 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] text-center">
         QuestLog Scheduler
       </h1>
 
-      <div className="bg-gray-950 rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,255,0.3)] border border-pink-600">
+
+      <div className="bg-gray-950 rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,255,0.3)] border border-cyan-600">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
@@ -129,13 +137,144 @@ export default function WeeklyCalendar() {
           setEditingEvent(null);
         }}
         onSave={handleSave}
+        onDelete={handleDelete}
         initialDate={editingEvent?.date || selectedInfo?.date}
         initialStart={editingEvent?.start || selectedInfo?.start}
         initialEnd={editingEvent?.end || selectedInfo?.end}
         initialTitle={editingEvent?.title || ""}
         initialDescription={editingEvent?.description || ""}
-        initialColor={editingEvent?.color || "#ec4899"}
+        initialColor={editingEvent?.color || "#f59e0b"}
+        isEditing={!!editingEvent}
       />
+      
+      {/* Updated calendar styling */}
+      <style jsx global>{`
+        /* Clean up calendar borders and cells */
+        .fc {
+          --fc-border-color: rgba(64, 64, 64, 0.5);
+          --fc-page-bg-color: transparent;
+          --fc-neutral-bg-color: rgba(31, 41, 55, 0.5);
+          --fc-list-event-hover-bg-color: rgba(31, 41, 55, 0.7);
+        }
+
+        /* Remove excess borders */
+        .fc-theme-standard td, 
+        .fc-theme-standard th {
+          border-color: var(--fc-border-color);
+          border-style: solid;
+          border-width: 0.5px;
+        }
+
+        /* Soften the cell backgrounds */
+        .fc-day {
+          background: rgba(17, 24, 39, 0.3);
+        }
+
+        /* Style the header */
+        .fc-toolbar-title {
+          color: #06b6d4;
+          font-size: 1.25rem !important;
+        }
+
+        /* Style the buttons */
+        .fc-button {
+          background: rgba(31, 41, 55, 0.8) !important;
+          border: 1px solid rgba(6, 182, 212, 0.3) !important;
+          color: #06b6d4 !important;
+        }
+
+        .fc-button:hover {
+          background: rgba(31, 41, 55, 1) !important;
+          border-color: #06b6d4 !important;
+        }
+
+        .fc-button-active {
+          background: rgba(6, 182, 212, 0.2) !important;
+          border-color: #06b6d4 !important;
+        }
+
+        /* Style today's date */
+        .fc-day-today {
+          background: rgba(6, 182, 212, 0.1) !important;
+        }
+
+        /* Clean up time grid */
+        .fc-timegrid-slot {
+          height: 3rem !important;
+          border-bottom: 0.5px solid var(--fc-border-color) !important;
+        }
+
+        .fc-timegrid-slot-label {
+          color: #06b6d4;
+        }
+
+        /* Event styling */
+        .fc-event {
+          border: none !important;
+          border-radius: 4px !important;
+          padding: 2px 4px !important;
+        }
+
+        /* Day Grid hover effect */
+        .fc-daygrid-day {
+          position: relative;
+          overflow: hidden;
+        }
+        .fc-daygrid-day::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            135deg,
+            rgba(0, 255, 255, 0.1) 0%,
+            rgba(0, 255, 255, 0.3) 50%,
+            rgba(0, 255, 255, 0.1) 100%
+          );
+          opacity: 0;
+          transition: opacity 0.3s ease, transform 0.3s ease;
+          transform: scale(1.2);
+          pointer-events: none;
+          z-index: 1;
+        }
+        .fc-daygrid-day:hover::before {
+          opacity: 1;
+          transform: scale(1);
+        }
+
+        /* Time Grid hover effect */
+        .fc-timegrid-slot {
+          position: relative;
+          overflow: hidden;
+        }
+        .fc-timegrid-slot::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: radial-gradient(
+            circle at center,
+            rgba(0, 255, 255, 0.4) 0%,
+            rgba(0, 255, 255, 0.1) 70%,
+            transparent 100%
+          );
+          opacity: 0;
+          transform: scale(0.5);
+          transition: opacity 0.3s ease, transform 0.3s ease;
+          pointer-events: none;
+          z-index: 1;
+        }
+        .fc-timegrid-slot:hover::before {
+          opacity: 1;
+          transform: scale(1);
+        }
+      `}</style>
     </div>
   );
 }
+
+// testingg
