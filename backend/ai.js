@@ -39,7 +39,7 @@ export const getPersonalizedSuggestions = async (journalEntries) => {
       messages: [
         {
           role: "system",
-          content: `You are a personal development AI assistant. Based on the journal entires, provide main quests that most align with the users usual task
+          content: `You are a personal development AI assistant. Based on the journal entires, provide main quests that most align with the users journal entries.
           Format each quest as a JSON object with the following structure:
             {
                 "title": "Quest title",
