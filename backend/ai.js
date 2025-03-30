@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 
 // Initialize OpenAI with your API key
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: process.env.OPENAI_API_KEY || '',
 });
 
 // Function to get AI response for journal entries
