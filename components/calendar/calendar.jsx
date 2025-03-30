@@ -99,13 +99,22 @@ export default function WeeklyCalendar() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white font-mono p-6">
-      <h1 className="text-4xl font-bold text-cyan-500 mb-6 drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] text-center">
+    <div className="min-h-screen bg-[#150A18] text-white font-mono p-6">
+      <h1 className="text-4xl font-bold text-[#FF2E63] mb-6 drop-shadow-[0_0_8px_rgba(255,46,99,0.8)] text-center">
         QuestLog Scheduler
       </h1>
 
+      <div className="bg-[#1F1225] rounded-xl p-4 relative">
+        {/* Angular cuts using pseudo-elements */}
+        <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#08F7FE]" />
+        <div className="absolute -top-[2px] -right-[2px] w-4 h-4 border-t-2 border-r-2 border-[#08F7FE]" />
+        <div className="absolute -bottom-[2px] -left-[2px] w-4 h-4 border-b-2 border-l-2 border-[#08F7FE]" />
+        <div className="absolute -bottom-[2px] -right-[2px] w-4 h-4 border-b-2 border-r-2 border-[#08F7FE]" />
+        
+        {/* Decorative lines */}
+        <div className="absolute top-0 right-0 w-24 h-[1px] bg-gradient-to-l from-[#08F7FE] to-transparent" />
+        <div className="absolute bottom-0 left-0 w-24 h-[1px] bg-gradient-to-r from-[#08F7FE] to-transparent" />
 
-      <div className="bg-gray-950 rounded-2xl p-4 shadow-[0_0_20px_rgba(0,255,255,0.3)] border border-cyan-600">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
           initialView="dayGridMonth"
@@ -120,8 +129,8 @@ export default function WeeklyCalendar() {
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
-          dayHeaderClassNames={() => "bg-gray-800 text-pink-400"}
-          slotLabelClassNames={() => "text-cyan-300"}
+          dayHeaderClassNames={() => "bg-[#1F1225] text-[#FF2E63] font-mono"}
+          slotLabelClassNames={() => "text-[#08F7FE] font-mono"}
           eventDidMount={(info) => {
             if (info.event.extendedProps.description) {
               info.el.setAttribute("title", info.event.extendedProps.description);
@@ -143,7 +152,7 @@ export default function WeeklyCalendar() {
         initialEnd={editingEvent?.end || selectedInfo?.end}
         initialTitle={editingEvent?.title || ""}
         initialDescription={editingEvent?.description || ""}
-        initialColor={editingEvent?.color || "#f59e0b"}
+        initialColor={editingEvent?.color || "#FF2E63"}
         isEditing={!!editingEvent}
       />
       

@@ -43,10 +43,9 @@ export default function login() {
     ]
 
   return (
-  
-    <>
+    <div className="min-h-screen bg-[#150A18]">
       <Navbar navLinks={navigation}/>
-      <div className="flex min-h-screen items-center justify-center bg-[#150A18]">
+      <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md p-8 bg-[#442A46] rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold text-center text-white">Sign In</h2>
 
@@ -124,6 +123,6 @@ export default function login() {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

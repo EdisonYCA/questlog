@@ -15,6 +15,7 @@ export const signUpUser = (email, password) => {
       return true;
     })
     .catch((error) => {
+      // TODO: handle errors
       const errorCode = error.code;
       const errorMessage = error.message;
       return false;
@@ -30,7 +31,6 @@ export const logUserIn = (email, password) => {
     const errorCode = error.code;
     const errorMessage = error.message;
   });
-
 }
 
 export const logUserInGoogle = () => {
