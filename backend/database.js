@@ -132,3 +132,18 @@ export const addLastActive = async (lastActive) => {
 export const addInterests = async (interests) => {
   updateUserData(getUserUID(), { interests });
 };
+
+export const getCalendar = async (uid) => {
+  try {
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      return userDoc.data().calendar || [];
+    }
+    return [];
+  } catch (error) {
+    console.error("Error getting calendar data:", error);
+    return [];
+  }
+};
