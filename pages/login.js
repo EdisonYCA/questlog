@@ -6,28 +6,35 @@ import { useRouter } from "next/router";
 export default function login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const validateUserCredentials = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email) && password.length > 0;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address");
+      return false;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return false;
+    }
+    return true;
   };
 
   const handleSignIn = async (e) => {
     e.preventDefault();
+    setError("");
 
     if (!validateUserCredentials()) {
-      setError(true);
       return;
     }
 
     try {
       await logUserIn(email, password);
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (err) {
-      setError(true);
-      console.log(err)
+      setError(err.message);
     }
   };
 
@@ -91,7 +98,7 @@ export default function login() {
 
           {error && (
             <p className="text-red-500 text-sm mt-2">
-              Invalid entry. Please check your input.
+              {error}
             </p>
           )}
 
