@@ -141,3 +141,38 @@ export const BuildSchedule = async (activeQuests, sideQuests) => {
         throw error;
     }
 };
+
+export const generateInterest = async (interests) => {
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4.0-mini",
+        messages: [
+          {
+            role: "system",
+            content: `You are a quest-generating AI assistant. Based on the user's interests, generate an initial list of 3-5 side quests that would be most relevant to them.
+            {
+              "title": "Quest title",
+              "description": "Detailed quest description",
+              "reward": "Reward description (e.g., '50 DATA FRAGMENTS')"
+              "time": "Time to complete quest (e.g., '1 hour', '30 minutes')"
+              "difficulty": "Main quest or side quest"
+            }
+            Return an array of these quest objects.`
+          },
+          {
+            role: "user",
+            content: `Based on these initial interests, generate personalized side quests: ${JSON.stringify(interests)} and completed quests: ${JSON.stringify(completeQuests)}`
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 1000,
+      });
+  
+      // Parse the response to ensure it's valid JSON
+      const quests = JSON.parse(completion.choices[0].message.content);
+      return quests;
+    } catch (error) {
+      console.error("Error generating side quests:", error);
+      throw error;
+    }
+  };
