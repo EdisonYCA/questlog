@@ -64,6 +64,9 @@ export const logUserInGoogle = async (setUser) => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
+    if (user.newUser) {
+      await initUserEntry(user.uid, user.email);
+    }
     setUser(user);
     return user;
   } catch (error) {
