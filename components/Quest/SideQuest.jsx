@@ -39,7 +39,7 @@ export default function SideQuest({ title, description, reward }) {
                             SIDE QUEST {isCompleted && '• COMPLETED'}
                         </div>
                         <h3 className="text-xl font-bold text-white transition-colors duration-300 
-                            group-hover:text-[#08F7FE] font-mono">
+                            group-hover:text-[#08F7FE] font-mono truncate hover:text-clip hover:whitespace-normal" title={title}>
                             {title}
                         </h3>
                     </div>
@@ -49,7 +49,7 @@ export default function SideQuest({ title, description, reward }) {
                     isCompleted ? 'border-[#FF2E63]/30' : 'border-[#08F7FE]/30'
                 } transition-all duration-300 group-hover:border-[#08F7FE]/50 group-hover:pl-6 ${
                     isCompleted && 'line-through opacity-70'
-                } font-mono`}>
+                } font-mono line-clamp-2 hover:line-clamp-none hover:whitespace-normal`} title={description}>
                     {description}
                 </div>
                 

@@ -32,30 +32,50 @@ export const getAIResponse = async (journalEntries) => {
 };
 
 // Function to get personalized suggestions based on journal entries
-export const getPersonalizedSuggestions = async (journalEntries) => {
+export async function getPersonalizedSuggestions(journalEntries, currentQuests = []) {
   try {
+    // If there are already 3 or more quests, don't generate new ones
+    if (currentQuests.length >= 3) {
+      return { quests: [] };
+    }
+
+    const prompt = `Based on the following journal entries, generate 1 personalized quest that would help the user achieve their goals. The quest should be specific, actionable, and aligned with the user's interests and goals.
+
+IMPORTANT FORMATTING RULES:
+1. Quest title MUST be 30-40 characters long
+2. Quest description MUST be 80-100 characters long
+3. Quest MUST have a timeframe in the format "HH:MMAM-HH:MMPM"
+4. Quest MUST have a reward value between 100-500 DATA FRAGMENTS
+
+Journal Entries:
+${journalEntries.map(entry => `- ${entry.title}: ${entry.body}`).join('\n')}
+
+Generate exactly 1 quest in the following JSON format:
+{
+  "quests": [
+    {
+      "title": "30-40 character title",
+      "description": "80-100 character description",
+      "timeframe": "HH:MMAM-HH:MMPM",
+      "reward": "number between 100-500 DATA FRAGMENTS"
+    }
+  ]
+}`;
+
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4",
       messages: [
         {
           role: "system",
-          content: `You are a personal development AI assistant. Based on the journal entries, provide main 3 "quests" that most align with the users entries.
-          Format each quest as a JSON object with the following structure:
-            {
-                "title": "Quest title",
-                "description": "quest description",
-                "reward": "Reward description (e.g., 'DATA FRAGMENT: [AMOUNT] XP')"
-                "timeframe": "Time to complete quest (current-time to current-time + [amount of time quest takes])"
-            }
-          Return an array of these quest objects.`
+          content: "You are a helpful AI assistant that generates personalized quests based on journal entries. Always follow the exact formatting rules specified in the prompt."
         },
         {
           role: "user",
-          content: `Based on these journal entries, what personalized suggestions do you have for me? ${JSON.stringify(journalEntries)}`
+          content: prompt
         }
       ],
       temperature: 0.7,
-      max_tokens: 500,
+      max_tokens: 500
     });
 
     // Parse the response to ensure it's valid JSON
@@ -65,7 +85,7 @@ export const getPersonalizedSuggestions = async (journalEntries) => {
     console.error("Error getting personalized suggestions:", error);
     throw error;
   }
-};
+}
 
 // Function to generate side quests based on journal entries
 export const generateSideQuests = async (journalEntries, completeQuests) => {
