@@ -1,6 +1,6 @@
 import { auth, db } from "@/library/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { initUserEntry } from "@/backend/database";
+import { initUserEntry, addCurrentStreakDays } from "@/backend/database";
 
 export const getUserUID = () => {
   return auth.currentUser?.uid;
@@ -28,6 +28,7 @@ export const logUserIn = async (email, password, setUser) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
+    await addCurrentStreakDays();
     setUser(user);
     return user;
   } catch (error) {
@@ -47,6 +48,7 @@ export const logUserInGoogle = async (setUser) => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
+    await addCurrentStreakDays();
     setUser(user);
     return user;
   } catch (error) {
