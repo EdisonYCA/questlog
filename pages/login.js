@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { logUserIn, logUserInGoogle } from "@/backend/auth";
 import { useRouter } from "next/router";
+import { useStateContext } from "@/context/StateContent";
 import { useAuth } from "@/context/AuthContext";
 import Navbar from "@/components/landing/Navbar";
 
@@ -10,7 +11,7 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setUser } = useAuth();
+  const { setUser } = useStateContext();
 
   const validateUserCredentials = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -36,6 +37,8 @@ export default function Login() {
     }
 
     try {
+      await logUserIn(email, password, setUser);
+      router.push("/dashboard/journal");
       await logUserIn(email, password, setUser);
       router.push('/dashboard/journal');
     } catch (err) {
