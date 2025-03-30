@@ -52,7 +52,7 @@ export default function Journal() {
   });
 
   const navigation = [
-    { name: "Home", href: "/", current: false },
+    { name: "Journal", href: "/dashboard/journal", current: true },
     { name: "Calendar", href: "/dashboard/calendar", current: false },
     { name: "Quests", href: "/dashboard/quests", current: false },
   ]

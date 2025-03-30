@@ -47,9 +47,9 @@ const mainQuests = [
 
 export default function QuestsPage() {
     const navigation = [
-      { name: "Dashboard", href: "/dashboard", current: false },
-      { name: "Quests", href: "/quests", current: true },
-      { name: "Profile", href: "/profile", current: false },
+      { name: "Journal", href: "/dashboard/journal", current: false },
+      { name: "Calendar", href: "/dashboard/calendar", current: false },
+      { name: "Quests", href: "/dashboard/quests", current: true },
     ];
 
     return (
