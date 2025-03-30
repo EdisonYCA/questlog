@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   return (
+    <main className={`min-h-screen bg-[#150A18] text-white ${geistSans.variable} ${geistMono.variable}`}>
       <Navbar />
       <div className="w-full h-screen flex items-center justify-center relative">
         <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
@@ -46,38 +47,3 @@ export default function Home() {
     </main>
   );
 }
-
-const HomePageContainer = styled.div`
-  width: 100vw;
-  height: 100vh;
-  background-color: #150a18;
-`;
-
-const HeroSection = styled.section`
-  width: 100%;
-  height: 100%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const TitleAndButton = styled.div`
-  width: 60%;
-  max-width: 700px;
-  padding: 30px;
-`;
-
-const HeroTitle = styled.h1`
-  color: #DF2A88;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
-  line-height: 1.3;
-`;
-
-const HeroImgWrapper = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  z-index: 0;
-`;

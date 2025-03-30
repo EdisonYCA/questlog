@@ -1,17 +1,4 @@
 @import "tailwindcss";
-
-  
-body {
-    color: rgb(var(--foreground-rgb));
-    background-color: rgb(var(--background-rgb));
-    min-height: 100vh;
-  }
-  
-  .quest-card {
-    backdrop-filter: blur(8px);
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-
 @import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 @theme {
