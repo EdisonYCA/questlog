@@ -4,8 +4,6 @@ import WeeklyCalendar from "../../components/calendar/calendar";
 import Navbar from "@/components/landing/Navbar";
 import { useStateContext } from "@/context/StateContext";
 import { useRouter } from "next/router";
-import { getCalendar } from "@/backend/database";
-import { getUserUID } from "@/backend/auth";
 
 // Navigation links (taken from your Journal component)
 const navigation = [
@@ -17,24 +15,11 @@ const navigation = [
 export default function CalendarPage() {
   const { user } = useStateContext();
   const router = useRouter();
-  const [calendarEvents, setCalendarEvents] = useState([]);
-
   useEffect(() => {
     if (!user) {
       router.push("/login");
-      return;
     }
-
-    const fetchCalendarData = async () => {
-      const uid = getUserUID();
-      if (uid) {
-        const events = await getCalendar(uid);
-        setCalendarEvents(events);
-      }
-    };
-
-    fetchCalendarData();
-  }, [user, router]);
+  }, [user]);
 
   return (
     <main className="min-h-screen bg-[#150A18] text-white relative">
@@ -43,7 +28,7 @@ export default function CalendarPage() {
       <div className="fixed inset-0 bg-[linear-gradient(45deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-5" />
       <Navbar navLinks={navigation} />
       <div className="max-w-7xl mx-auto px-8 py-8">
-        <WeeklyCalendar initialEvents={calendarEvents} />
+        <WeeklyCalendar />
       </div>
     </main>
   );
