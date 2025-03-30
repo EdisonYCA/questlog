@@ -8,28 +8,37 @@ export default function MainQuest({ title, description, timeframe, reward }) {
 
   useEffect(() => {
     if (timeframe) {
-      // Parse timeframe and calculate progress
-      const [startTime, endTime] = timeframe.split('-').map(time => {
-        const [_, h, m, meridiem] = time.match(/(\d+):(\d+)([AP]M)/);
-        let hours = parseInt(h, 10);
-        const minutes = parseInt(m, 10);
-        if (meridiem === "PM" && hours !== 12) hours += 12;
-        if (meridiem === "AM" && hours === 12) hours = 0;
-        return hours * 60 + minutes;
-      });
-      
-      const updateProgress = () => {
+      try {
+        // Parse timeframe and calculate progress
+        const [startTime, endTime] = timeframe.split('-').map(time => {
+          const match = time.match(/(\d+):(\d+)([AP]M)/);
+          if (!match) {
+            console.warn(`Invalid time format: ${time}`);
+            return null;
+          }
+          const [_, h, m, meridiem] = match;
+          let hours = parseInt(h, 10);
+          const minutes = parseInt(m, 10);
+          if (meridiem === "PM" && hours !== 12) hours += 12;
+          if (meridiem === "AM" && hours === 12) hours = 0;
+          return hours * 60 + minutes;
+        });
+
+        if (startTime === null || endTime === null) {
+          setProgress(0);
+          return;
+        }
+
         const now = new Date();
         const currentMinutes = now.getHours() * 60 + now.getMinutes();
         const totalDuration = endTime - startTime;
         const elapsed = currentMinutes - startTime;
-        const newProgress = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
-        setProgress(newProgress);
-      };
-
-      updateProgress();
-      const interval = setInterval(updateProgress, 60000); // Update every minute
-      return () => clearInterval(interval);
+        const progress = Math.min(Math.max((elapsed / totalDuration) * 100, 0), 100);
+        setProgress(progress);
+      } catch (error) {
+        console.error("Error calculating progress:", error);
+        setProgress(0);
+      }
     }
   }, [timeframe]);
 

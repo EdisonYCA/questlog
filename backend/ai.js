@@ -35,18 +35,17 @@ export const getAIResponse = async (journalEntries) => {
 export const getPersonalizedSuggestions = async (journalEntries) => {
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-4.0-mini",
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: `You are a personal development AI assistant. Based on the journal entires, provide main quests that most align with the users usual task
+          content: `You are a personal development AI assistant. Based on the journal entries, provide main 3 "quests" that most align with the users entries.
           Format each quest as a JSON object with the following structure:
             {
                 "title": "Quest title",
-                "description": "Detailed quest description",
-                "reward": "Reward description (e.g., '50 DATA FRAGMENTS')"
-                "time": "Time to complete quest (e.g., '1 hour', '30 minutes')"
-                "difficulty": "Main quest or side quest"
+                "description": "quest description",
+                "reward": "Reward description (e.g., 'DATA FRAGMENT: [AMOUNT] XP')"
+                "timeframe": "Time to complete quest (current-time to current-time + [amount of time quest takes])"
             }
           Return an array of these quest objects.`
         },
@@ -59,7 +58,9 @@ export const getPersonalizedSuggestions = async (journalEntries) => {
       max_tokens: 500,
     });
 
-    return completion.choices[0].message.content;
+    // Parse the response to ensure it's valid JSON
+    const suggestions = JSON.parse(completion.choices[0].message.content);
+    return suggestions;
   } catch (error) {
     console.error("Error getting personalized suggestions:", error);
     throw error;

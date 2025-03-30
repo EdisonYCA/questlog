@@ -70,6 +70,7 @@ export const addJournalEntry = async (uid, entry) => {
       timestamp: new Date().toISOString(),
     };
 
+    // Add the journal entry
     await updateDoc(userRef, {
       journals: arrayUnion(newEntry)
     });
@@ -118,7 +119,18 @@ export const addLongestStreakDays = async (days) => {
 };
 
 export const addCalendar = async (calendar) => {
-  updateUserData(getUserUID(), { calendar });
+  try {
+    const uid = getUserUID();
+    if (!uid) return;
+
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, {
+      calendar: calendar
+    });
+  } catch (error) {
+    console.error("Error updating calendar:", error);
+    throw error;
+  }
 };
 
 export const addUserName = async (userName) => {
@@ -145,5 +157,32 @@ export const getCalendar = async (uid) => {
   } catch (error) {
     console.error("Error getting calendar data:", error);
     return [];
+  }
+};
+
+export const getMainQuests = async (uid) => {
+  try {
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      return userDoc.data().activeMainQuests || [];
+    }
+    return [];
+  } catch (error) {
+    console.error("Error getting main quests:", error);
+    return [];
+  }
+};
+
+export const updateMainQuests = async (uid, quests) => {
+  try {
+    const userRef = doc(db, "users", uid);
+    await updateDoc(userRef, {
+      activeMainQuests: arrayUnion(...quests)
+    });
+  } catch (error) {
+    console.error("Error updating main quests:", error);
+    throw error;
   }
 };

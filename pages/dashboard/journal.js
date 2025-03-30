@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/landing/Navbar";
-import { addJournalEntry, getJournalEntries } from "@/backend/database";
+import { addJournalEntry, getJournalEntries, getMainQuests, updateMainQuests } from "@/backend/database";
 import { useStateContext } from "@/context/StateContext";
 import { useRouter } from "next/router";
+import { db } from "@/library/firebaseConfig";
 
 export default function Journal() {
   const [isEntryOpen, setIsEntryOpen] = useState(false);
@@ -46,9 +47,62 @@ export default function Journal() {
     if (!user) return;
 
     try {
+      // Add the journal entry
       await addJournalEntry(user.uid, newEntry);
       setNewEntry({ title: "", body: "" });
-      loadEntries();
+      await loadEntries();
+
+      // Get current main quests
+      const currentMainQuests = await getMainQuests(user.uid);
+      
+      // If we already have 3 quests, don't add more
+      if (currentMainQuests.length >= 3) {
+        return;
+      }
+
+      // Get AI suggestions
+      try {
+        const response = await fetch('/api/ai', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            journalEntries: [...entries, newEntry],
+            type: 'suggestions'
+          }),
+        });
+
+        const data = await response.json();
+        if (!data.response) {
+          return;
+        }
+
+        const suggestions = data.response;
+        
+        // Calculate how many new quests to add
+        const questsToAdd = Math.max(0, 3 - currentMainQuests.length);
+        
+        if (questsToAdd > 0) {
+          // Take only the number of quests needed to reach 3
+          const newQuests = suggestions.slice(0, questsToAdd).map(quest => ({
+            ...quest,
+            status: 'active',
+            createdAt: new Date().toISOString()
+          }));
+          
+          // Update user's main quests
+          await updateMainQuests(user.uid, newQuests);
+        }
+      } catch (error) {
+        console.error("Error getting AI suggestions:", error);
+      }
+      
+      // Refresh the quests page if it's open
+      const questsPage = document.querySelector('a[href="/dashboard/quests"]');
+      if (questsPage) {
+        window.location.href = '/dashboard/quests';
+      }
     } catch (error) {
       console.error("Error adding entry:", error);
     }
