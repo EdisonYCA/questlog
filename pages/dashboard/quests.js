@@ -53,18 +53,19 @@ export default function QuestsPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-900 text-white">
+        <div className="min-h-screen bg-[#150A18] text-white relative">
           <Navbar navLinks={navigation} />
-          {/* Background gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-purple-500/10 to-gray-900/50 pointer-events-none" />
+          {/* Background grid with diagonal lines */}
+          <div className="fixed inset-0 bg-[linear-gradient(#711142_1px,transparent_1px),linear-gradient(90deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-10" />
+          <div className="fixed inset-0 bg-[linear-gradient(45deg,#711142_1px,transparent_1px)] bg-[size:35px_35px] opacity-5" />
           
           {/* Content */}
           <div className="relative z-10 p-8">
             <div className="max-w-6xl mx-auto">
               <div className="flex justify-between items-start mb-12">
                 <div>
-                  <h1 className="text-5xl font-bold text-cyan-400 mb-2">QUESTS</h1>
-                  <p className="text-xl text-purple-400 font-medium">
+                  <h1 className="text-5xl font-bold text-[#FF2E63] mb-2 font-mono">QUESTS</h1>
+                  <p className="text-xl text-[#08F7FE] font-medium font-mono">
                     These are your quests for the day
                   </p>
                 </div>
@@ -73,9 +74,10 @@ export default function QuestsPage() {
 
               {/* Main Quests Section */}
               <div className="mb-12">
-                <h2 className="text-2xl text-cyan-400 mb-6 font-semibold flex items-center">
-                  <span className="inline-block w-2 h-2 bg-cyan-400 rounded-full mr-3" />
+                <h2 className="text-2xl text-[#FF2E63] mb-6 font-semibold font-mono flex items-center">
+                  <span className="inline-block w-2 h-2 bg-[#FF2E63] rounded-full mr-3" />
                   Main Quest Log
+                  <div className="ml-4 h-[1px] flex-grow bg-gradient-to-r from-[#FF2E63]/30 to-transparent" />
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {mainQuests.map((quest, index) => (
@@ -92,9 +94,10 @@ export default function QuestsPage() {
 
               {/* Side Quests Section */}
               <div>
-                <h2 className="text-2xl text-purple-400 mb-6 font-semibold flex items-center">
-                  <span className="inline-block w-2 h-2 bg-purple-400 rounded-full mr-3" />
+                <h2 className="text-2xl text-[#08F7FE] mb-6 font-semibold font-mono flex items-center">
+                  <span className="inline-block w-2 h-2 bg-[#08F7FE] rounded-full mr-3" />
                   Side Quest Log
+                  <div className="ml-4 h-[1px] flex-grow bg-gradient-to-r from-[#08F7FE]/30 to-transparent" />
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {sideQuests.map((quest, index) => (
