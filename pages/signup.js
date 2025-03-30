@@ -43,7 +43,7 @@ export default function Signup() {
     try {
       const result = await signUpUser(email, password, setUser);
       if (result) {
-        router.push('/dashboard/journal');
+        router.push('/dashboard/interests');
       } else {
         setError(result.error);
       }
@@ -59,7 +59,7 @@ export default function Signup() {
     try {
       const result = await signInWithGoogle();
       if (result.success) {
-        router.push('/dashboard/journal');
+        router.push('/dashboard/interests');
       } else {
         setError(result.error);
       }
