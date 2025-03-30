@@ -27,11 +27,22 @@ module.exports = {
             opacity: '0',
             transform: 'scale(1) translate(0, 0)'
           }
+        },
+        'gradient-xy': {
+          '0%, 100%': {
+            'background-size': '400% 400%',
+            'background-position': 'left center'
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center'
+          }
         }
       },
       animation: {
         'expand': 'expand 0.3s ease-out forwards',
-        'contract': 'contract 0.3s ease-in forwards'
+        'contract': 'contract 0.3s ease-in forwards',
+        'gradient-xy': 'gradient-xy 3s ease infinite',
       }
     },
   },

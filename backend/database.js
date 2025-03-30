@@ -6,9 +6,8 @@ import {
   arrayRemove,
   serverTimestamp,
 } from "firebase/firestore";
-import { db } from "@/library/firebaseConfig";
-import { getUserUID } from "@/backend/auth";
-// Helper function to update user document data
+import { doc, setDoc, updateDoc, arrayUnion, arrayRemove, serverTimestamp } from "firebase/firestore";
+
 const updateUserData = async (uid, data) => {
   const userRef = doc(db, "users", uid);
 
@@ -94,5 +93,3 @@ export const addLastActive = async (lastActive) => {
 export const addInterests = async (interests) => {
   updateUserData(getUserUID(), { interests });
 };
-
-//testt
