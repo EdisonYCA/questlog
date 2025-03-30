@@ -5,15 +5,40 @@ import Navbar from "@/components/landing/Navbar";
 import { useState, useEffect } from "react";
 import { useStateContext } from "@/context/StateContext";
 import { useRouter } from "next/router";
+import { db } from "@/library/firebaseConfig";
+import { doc, getDoc } from "firebase/firestore";
 
 export default function QuestsPage() {
   const { user } = useStateContext();
   const router = useRouter();
+  const [mainQuests, setMainQuests] = useState([]);
+  const [sideQuests, setSideQuests] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!user) {
       router.push("/login");
+      return;
     }
+
+    const fetchQuests = async () => {
+      try {
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setMainQuests(userData.activeMainQuests || []);
+          setSideQuests(userData.activeSideQuests || []);
+        }
+      } catch (error) {
+        console.error("Error fetching quests:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchQuests();
   }, [user, router]);
 
   if (!user) {
@@ -26,45 +51,13 @@ export default function QuestsPage() {
     { name: "Quests", href: "/dashboard/quests", current: true },
   ];
 
-  // dummmy data for now
-  const mainQuests = [
-    {
-      title: "Hit the gym",
-      description: "Complete your daily workout routine",
-      timeframe: "12:00AM - 11:59PM",
-      reward: "100 DATA FRAGMENTS",
-    },
-    {
-      title: "Complete Project Milestone",
-      description: "Finish the core functionality implementation",
-      timeframe: "10:00AM-12:00PM",
-      reward: "150 DATA FRAGMENTS",
-    },
-    {
-      title: "Team Meeting",
-      description: "Sync with the team on weekly progress",
-      timeframe: "1:00PM-2:00PM",
-      reward: "80 DATA FRAGMENTS",
-    },
-  ];
-
-  const sideQuests = [
-    {
-      title: "Patch the Firewall Breach",
-      description: "Tidy up workspace",
-      reward: "30 DATA FRAGMENTS",
-    },
-    {
-      title: "Code Review",
-      description: "Review pending pull requests",
-      reward: "45 DATA FRAGMENTS",
-    },
-    {
-      title: "Update Documentation",
-      description: "Add missing API documentation",
-      reward: "25 DATA FRAGMENTS",
-    },
-  ];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#150A18] text-white flex items-center justify-center">
+        <div className="text-xl">Loading quests...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#150A18] text-white relative">
@@ -97,15 +90,21 @@ export default function QuestsPage() {
                 <div className="ml-4 h-[1px] flex-grow bg-gradient-to-r from-[#FF2E63]/30 to-transparent" />
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {mainQuests.map((quest, index) => (
-                  <MainQuest
-                    key={index}
-                    title={quest.title}
-                    description={quest.description}
-                    timeframe={quest.timeframe}
-                    reward={quest.reward}
-                  />
-                ))}
+                {mainQuests.length > 0 ? (
+                  mainQuests.map((quest, index) => (
+                    <MainQuest
+                      key={index}
+                      title={quest.title}
+                      description={quest.description}
+                      timeframe={quest.timeframe}
+                      reward={quest.reward}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-gray-400 py-8">
+                    No main quests available. Complete some tasks to get started!
+                  </div>
+                )}
               </div>
             </div>
 
@@ -117,14 +116,20 @@ export default function QuestsPage() {
                 <div className="ml-4 h-[1px] flex-grow bg-gradient-to-r from-[#08F7FE]/30 to-transparent" />
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sideQuests.map((quest, index) => (
-                  <SideQuest
-                    key={index}
-                    title={quest.title}
-                    description={quest.description}
-                    reward={quest.reward}
-                  />
-                ))}
+                {sideQuests.length > 0 ? (
+                  sideQuests.map((quest, index) => (
+                    <SideQuest
+                      key={index}
+                      title={quest.title}
+                      description={quest.description}
+                      reward={quest.reward}
+                    />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-gray-400 py-8">
+                    No side quests available. Complete some tasks to get started!
+                  </div>
+                )}
               </div>
             </div>
           </div>
