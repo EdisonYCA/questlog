@@ -30,7 +30,7 @@ export default function signup() {
 
     try {
       await signUpUser(email, password);
-      router.push("/dashboard")
+      router.push("/journal")
     } catch (err) {
       setError(true);
       console.log(err)
