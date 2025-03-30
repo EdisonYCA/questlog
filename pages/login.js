@@ -32,7 +32,7 @@ export default function login() {
 
     try {
       await logUserIn(email, password);
-      router.push("/dashboard/journal");
+      router.push("/dashboard")
     } catch (err) {
       setError(err.message);
     }

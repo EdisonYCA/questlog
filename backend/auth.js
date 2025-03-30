@@ -1,10 +1,9 @@
-import { auth } from "@/library/firebaseConfig";
+import { auth, db } from "@/library/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { initUserEntry } from "@/backend/database";
 
-
-export const signUpUser = (email, password, setUser) => {
-  return createUserWithEmailAndPassword(auth, email, password)
+export const signUpUser = (email, password) => {
+  createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
       initUserEntry(user.uid, email);
@@ -12,40 +11,24 @@ export const signUpUser = (email, password, setUser) => {
       return true;
     })
     .catch((error) => {
-      // Handle specific error cases
-      if (error.code === 'auth/email-already-in-use') {
-        throw new Error('This email is already registered. Please sign in instead.');
-      }
-      if (error.code === 'auth/weak-password') {
-        throw new Error('Password should be at least 6 characters long.');
-      }
-      throw error;
+    // TODO: handle errors
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      return false;
     });
 };
 
 export const logUserIn = (email, password) => {
-  return signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      return true;
-    })
-    .catch((error) => {
-      // Handle specific error cases
-      if (error.code === 'auth/invalid-credential') {
-        throw new Error('Invalid email or password. Please try again.');
-      }
-      if (error.code === 'auth/user-not-found') {
-        throw new Error('No account found with this email. Please sign up first.');
-      }
-      if (error.code === 'auth/wrong-password') {
-        throw new Error('Incorrect password. Please try again.');
-      }
-      if (error.code === 'auth/invalid-email') {
-        throw new Error('Please enter a valid email address.');
-      }
-      throw error;
-    });
-};
+  signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    const user = userCredential.user;
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+  });
+
+}
 
 export const logUserInGoogle = () => {
   signInWithPopup(auth, provider)
