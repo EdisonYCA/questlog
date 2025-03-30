@@ -10,22 +10,30 @@ export default function signup() {
   const [error, setError] = useState(false);
   const router = useRouter();
 
-
   const validateUserCredentials = () => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailRegex.test(email) && password.length > 0 && confirmPassword.length > 0 && password == confirmPassword;
+    return (
+      emailRegex.test(email) &&
+      password.length > 0 &&
+      confirmPassword.length > 0 &&
+      password == confirmPassword
+    );
   };
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
     if (!validateUserCredentials()) {
       setError(true);
       return;
     }
 
-    if (await signUpUser(email, password)) {
-      router.push("/"); 
-    } else {
-      setError(true); 
+    try {
+      await signUpUser(email, password);
+      router.push("/dashboard")
+    } catch (err) {
+      setError(true);
+      console.log(err)
     }
   };
 
@@ -58,7 +66,9 @@ export default function signup() {
                 Password
               </label>
               <input
-                onChange={(p) => {setPassword(p.target.value)}}
+                onChange={(p) => {
+                  setPassword(p.target.value);
+                }}
                 type="password"
                 placeholder="Create a password"
                 className="w-full mt-1 px-4 py-2 bg-[#3B0D29] text-white border border-[#711142] rounded-lg focus:ring-2 focus:ring-[#3E5A8E] focus:outline-none"
@@ -71,7 +81,9 @@ export default function signup() {
                 Confirm Password
               </label>
               <input
-                onChange={(p) => {setConfirmPassword(p.target.value)}}
+                onChange={(p) => {
+                  setConfirmPassword(p.target.value);
+                }}
                 type="password"
                 placeholder="Re-enter your password"
                 className="w-full mt-1 px-4 py-2 bg-[#3B0D29] text-white border border-[#711142] rounded-lg focus:ring-2 focus:ring-[#3E5A8E] focus:outline-none"
@@ -79,7 +91,10 @@ export default function signup() {
             </div>
 
             {/* Sign Up Button */}
-            <button type="submit" className="w-full bg-[#711142] text-white font-bold py-2 rounded-lg hover:bg-[#3B0D29] transition-all">
+            <button
+              type="submit"
+              className="w-full bg-[#711142] text-white font-bold py-2 rounded-lg hover:bg-[#3B0D29] transition-all"
+            >
               Sign Up
             </button>
           </form>
