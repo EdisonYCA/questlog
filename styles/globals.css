@@ -1,15 +1,8 @@
 @import "tailwindcss";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-rgb: 10, 10, 10;
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
-  font-family: 'Geist Mono', inter, 'Courier New', Courier, monospace;
-}
+@theme {
+    --color-midnight: #150A18;
+    --color-blue-dark: #6382BB;
+    --font-mono: "Geist Mono", monospace;
+  }
