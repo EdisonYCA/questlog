@@ -14,9 +14,15 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+  const navigation = [
+    { name: "About", href: "/about", current: false },
+    { name: "Login", href: "/login", current: false },
+    { name: "Signup", href: "/signup", current: false },
+  ]
+
   return (
-    <main className={`min-h-screen bg-[#150A18] text-white ${geistSans.variable} ${geistMono.variable}`}>
-      <Navbar />
+    <main className={`min-h-screen bg-[#FFE69D] text-white ${geistSans.variable} ${geistMono.variable}`}>
+      <Navbar navLinks={navigation} />
       <div className="w-full h-screen flex items-center justify-center relative">
         <div className="absolute inset-0 w-full h-full overflow-hidden z-0">
           <Image
@@ -34,7 +40,7 @@ export default function Home() {
             Turn everyday routines into epic adventures with our AI-powered journal.
           </h1>
           <Link 
-            href="/journal" 
+            href="/login" 
             className="mt-5 inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
           >
             Try QuestLog

@@ -16,7 +16,7 @@ export default function WeeklyCalendar() {
       start: "2025-03-29T10:00:00",
       end: "2025-03-29T11:00:00",
       description: "A sample task",
-      backgroundColor: "#10b981", // ✅ was "color"
+      backgroundColor: "#10b981", 
     },
   ]);
   

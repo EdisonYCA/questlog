@@ -37,9 +37,13 @@ export default function signup() {
     }
   };
 
+  const navigation = [
+    { name: "Home", href: "/", current: false }
+    ]
+
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar navLinks={navigation}></Navbar>
       <div className="flex min-h-screen items-center justify-center bg-[#150A18]">
         <div className="w-full max-w-md p-8 bg-[#442A46] rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold text-center text-white">
