@@ -1,24 +1,29 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import TaskModal from "./TaskModal";
+import { addCalendar } from "@/backend/database";
+import { getUserUID } from "@/backend/auth";
 
-export default function WeeklyCalendar() {
+export default function WeeklyCalendar({ initialEvents = [] }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedInfo, setSelectedInfo] = useState(null);
   const [editingEvent, setEditingEvent] = useState(null);
-  const [events, setEvents] = useState([
-    {
-      id: "1",
-      title: "Example Quest",
-      start: "2025-03-29T10:00:00",
-      end: "2025-03-29T11:00:00",
-      description: "A sample task",
-      backgroundColor: "#10b981",
-    },
-  ]);
+  const [events, setEvents] = useState(initialEvents);
+
+  useEffect(() => {
+    // Ensure events are properly formatted when initialEvents changes
+    const formattedEvents = initialEvents.map(event => ({
+      ...event,
+      start: new Date(event.start),
+      end: new Date(event.end),
+      backgroundColor: event.color || "#f59e0b",
+      borderColor: event.color || "#f59e0b"
+    }));
+    setEvents(formattedEvents);
+  }, [initialEvents]);
 
   const formatTime = (date) => date.toTimeString().slice(0, 5);
   const formatDate = (date) => date.toISOString().split("T")[0];
@@ -52,56 +57,81 @@ export default function WeeklyCalendar() {
       color: event.backgroundColor || event.color || "#f59e0b",
     });
 
-    setSelectedInfo(null); // not a new one
+    setSelectedInfo(null);
     setModalOpen(true);
   };
 
-  const handleSave = (task) => {
+  const handleSave = async (task) => {
+    let updatedEvents;
+    const newStart = new Date(`${task.date}T${task.startTime}`);
+    const newEnd = new Date(`${task.date}T${task.endTime}`);
+
     if (editingEvent?.id) {
       // Edit mode
-      setEvents((prev) =>
-        prev.map((ev) =>
-          ev.id === editingEvent.id
-            ? {
-                ...ev,
-                title: task.title,
-                start: `${task.date}T${task.startTime}`,
-                end: `${task.date}T${task.endTime}`,
-                description: task.description,
-                color: task.color,
-              }
-            : ev
-        )
+      updatedEvents = events.map((ev) =>
+        ev.id === editingEvent.id
+          ? {
+              ...ev,
+              title: task.title,
+              start: newStart,
+              end: newEnd,
+              description: task.description,
+              color: task.color,
+              backgroundColor: task.color,
+              borderColor: task.color
+            }
+          : ev
       );
     } else {
       // New event mode
       const newEvent = {
         id: Date.now().toString(),
         title: task.title || "Untitled",
-        start: `${task.date}T${task.startTime}`,
-        end: `${task.date}T${task.endTime}`,
+        start: newStart,
+        end: newEnd,
         description: task.description,
         color: task.color,
+        backgroundColor: task.color,
+        borderColor: task.color
       };
-      setEvents((prev) => [...prev, newEvent]);
+      updatedEvents = [...events, newEvent];
+    }
+
+    setEvents(updatedEvents);
+    
+    // Update Firebase
+    try {
+      const uid = getUserUID();
+      if (uid) {
+        await addCalendar(updatedEvents);
+      }
+    } catch (error) {
+      console.error("Error updating calendar in Firebase:", error);
     }
 
     setEditingEvent(null);
     setModalOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (editingEvent?.id) {
-      setEvents((prev) => prev.filter((ev) => ev.id !== editingEvent.id));
+      const updatedEvents = events.filter((ev) => ev.id !== editingEvent.id);
+      setEvents(updatedEvents);
+      
+      // Update Firebase
+      try {
+        const uid = getUserUID();
+        if (uid) {
+          await addCalendar(updatedEvents);
+        }
+      } catch (error) {
+        console.error("Error updating calendar in Firebase:", error);
+      }
     }
   };
 
   return (
     <div className="min-h-screen bg-[#150A18] text-white font-mono p-6">
-      <h1 className="text-4xl font-bold text-[#FF2E63] mb-6 drop-shadow-[0_0_8px_rgba(255,46,99,0.8)] text-center">
-        QuestLog Scheduler
-      </h1>
-
       <div className="bg-[#1F1225] rounded-xl p-4 relative">
         {/* Angular cuts using pseudo-elements */}
         <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#08F7FE]" />
@@ -125,7 +155,7 @@ export default function WeeklyCalendar() {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: null
           }}
           dayHeaderClassNames={() => "bg-[#1F1225] text-[#FF2E63] font-mono"}
           slotLabelClassNames={() => "text-[#08F7FE] font-mono"}
