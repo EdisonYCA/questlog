@@ -72,7 +72,7 @@ export default function Navbar({navLinks}) {
           </div>
         </div>
 
-        <DisclosurePanel className="sm:hidden bg-white">
+        <DisclosurePanel className="sm:hidden bg-transparent">
           <div className="space-y-1 px-2 pt-2 pb-3">
             {navigation.map((item) => (
               <DisclosureButton

@@ -48,9 +48,9 @@ export default function signup() {
     ]
 
   return (
-    <>
-      <Navbar navLinks={navigation}></Navbar>
-      <div className="flex min-h-screen items-center justify-center bg-[#150A18]">
+    <div className="min-h-screen bg-[#150A18]">
+      <Navbar navLinks={navigation}/>
+      <div className="flex min-h-screen items-center justify-center">
         <div className="w-full max-w-md p-8 bg-[#442A46] rounded-xl shadow-lg">
           <h2 className="text-3xl font-bold text-center text-white">
             Create an Account
@@ -137,6 +137,6 @@ export default function signup() {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }
