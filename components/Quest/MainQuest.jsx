@@ -51,7 +51,7 @@ export default function MainQuest({ title, description, timeframe, reward }) {
             isCompleted ? 'bg-[#08F7FE]/20' : 'bg-[#FF2E63]/20'
           } ring-2 ${
             isCompleted ? 'ring-[#08F7FE]' : 'ring-[#FF2E63]'
-          } transition-all duration-300 group-hover:ring-4`}>
+          } transition-all duration-300`}>
             {isCompleted ? (
               <FaCheckCircle className="w-6 h-6 text-[#08F7FE]" />
             ) : (
@@ -107,7 +107,7 @@ export default function MainQuest({ title, description, timeframe, reward }) {
               e.stopPropagation();
               setIsCompleted(!isCompleted);
             }}
-            className={`px-4 py-2 font-semibold transition-all duration-300 font-mono relative
+            className={`px-4 py-2 font-semibold transition-all duration-300 font-mono relative hover:scale-105
               ${isCompleted 
                 ? 'text-[#08F7FE]' 
                 : 'text-[#FF2E63]'
