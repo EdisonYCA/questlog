@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { BiBrain } from 'react-icons/bi';
 import { FaCheckCircle } from 'react-icons/fa';
+import { db } from '@/library/firebaseConfig';
+import { doc, updateDoc, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { useStateContext } from '@/context/StateContext';
 
-export default function MainQuest({ title, description, timeframe, reward }) {
+export default function MainQuest({ title, description, timeframe, reward, quest }) {
   const [isCompleted, setIsCompleted] = useState(false);
   const [progress, setProgress] = useState(0);
+  const { user } = useStateContext();
 
   useEffect(() => {
     if (timeframe) {
@@ -32,6 +36,24 @@ export default function MainQuest({ title, description, timeframe, reward }) {
       return () => clearInterval(interval);
     }
   }, [timeframe]);
+
+  const handleComplete = async () => {
+    if (!user) return;
+    
+    try {
+      const userRef = doc(db, "users", user.uid);
+      
+      // Use the full quest object for arrayRemove to ensure exact match
+      await updateDoc(userRef, {
+        activeMainQuests: arrayRemove(quest),
+        completedQuests: arrayUnion(quest)
+      });
+      
+      setIsCompleted(true);
+    } catch (error) {
+      console.error("Error completing quest:", error);
+    }
+  };
 
   return (
     <div className="bg-[#1F1225] relative group">
@@ -105,7 +127,9 @@ export default function MainQuest({ title, description, timeframe, reward }) {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsCompleted(!isCompleted);
+              if (!isCompleted) {
+                handleComplete();
+              }
             }}
             className={`px-4 py-2 font-semibold transition-all duration-300 font-mono relative hover:scale-105
               ${isCompleted 
