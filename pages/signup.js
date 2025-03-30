@@ -1,5 +1,34 @@
 import Navbar from "@/components/landing/Navbar";
+import { useState } from "react";
+import { signUpUser } from "@/backend/auth";
+import { useRouter } from "next/router";
+
 export default function signup() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(false);
+  const router = useRouter();
+
+
+  const validateUserCredentials = () => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email) && password.length > 0 && confirmPassword.length > 0 && password == confirmPassword;
+  };
+
+  const handleSignUp = async () => {
+    if (!validateUserCredentials()) {
+      setError(true);
+      return;
+    }
+
+    if (await signUpUser(email, password)) {
+      router.push("/"); 
+    } else {
+      setError(true); 
+    }
+  };
+
   return (
     <>
       <Navbar></Navbar>
@@ -9,25 +38,14 @@ export default function signup() {
             Create an Account
           </h2>
 
-          <form className="mt-6 space-y-4">
-            {/* Full Name */}
-            <div>
-              <label className="block text-sm font-medium text-[#E0D6EB]">
-                Full Name
-              </label>
-              <input
-                type="text"
-                placeholder="Enter your full name"
-                className="w-full mt-1 px-4 py-2 bg-[#3B0D29] text-white border border-[#711142] rounded-lg focus:ring-2 focus:ring-[#3E5A8E] focus:outline-none"
-              />
-            </div>
-
+          <form className="mt-6 space-y-4" onSubmit={handleSignUp}>
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-[#E0D6EB]">
                 Email
               </label>
               <input
+                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Enter your email"
                 className="w-full mt-1 px-4 py-2 bg-[#3B0D29] text-white border border-[#711142] rounded-lg focus:ring-2 focus:ring-[#3E5A8E] focus:outline-none"
@@ -40,6 +58,7 @@ export default function signup() {
                 Password
               </label>
               <input
+                onChange={(p) => {setPassword(p.target.value)}}
                 type="password"
                 placeholder="Create a password"
                 className="w-full mt-1 px-4 py-2 bg-[#3B0D29] text-white border border-[#711142] rounded-lg focus:ring-2 focus:ring-[#3E5A8E] focus:outline-none"
@@ -52,6 +71,7 @@ export default function signup() {
                 Confirm Password
               </label>
               <input
+                onChange={(p) => {setConfirmPassword(p.target.value)}}
                 type="password"
                 placeholder="Re-enter your password"
                 className="w-full mt-1 px-4 py-2 bg-[#3B0D29] text-white border border-[#711142] rounded-lg focus:ring-2 focus:ring-[#3E5A8E] focus:outline-none"
@@ -59,10 +79,16 @@ export default function signup() {
             </div>
 
             {/* Sign Up Button */}
-            <button className="w-full bg-[#711142] text-white font-bold py-2 rounded-lg hover:bg-[#3B0D29] transition-all">
+            <button type="submit" className="w-full bg-[#711142] text-white font-bold py-2 rounded-lg hover:bg-[#3B0D29] transition-all">
               Sign Up
             </button>
           </form>
+
+          {error && (
+            <p className="text-red-500 text-sm mt-2">
+              Invalid entry. Please check your input.
+            </p>
+          )}
 
           {/* Divider */}
           <div className="my-6 flex items-center justify-center">
