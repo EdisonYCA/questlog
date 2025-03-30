@@ -42,7 +42,7 @@ export default function Navbar({navLinks}) {
               <div className="flex shrink-0 items-center">
                 <Image
                   alt="Your Company"
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=white"
+                  src="/images/book.svg"
                   className="h-12 w-auto"
                   width={12}
                   height={12}
