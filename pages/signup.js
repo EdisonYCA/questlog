@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { signUpUser, signInWithGoogle } from "@/backend/auth";
 import { useRouter } from "next/router";
+import { useStateContext } from "@/context/StateContext";
 import Navbar from "@/components/landing/Navbar";
 
 export default function Signup() {
@@ -9,6 +10,7 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
+  const {setUser} = useStateContext();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -23,6 +25,7 @@ export default function Signup() {
       setError(result.error);
     }
   };
+
 
   const handleGoogleSignIn = async () => {
     const result = await signInWithGoogle();

@@ -1,103 +1,72 @@
-import { auth } from "@/library/firebaseConfig";
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword, 
-  signOut, 
-  GoogleAuthProvider, 
-  signInWithPopup 
+import { auth, db } from "@/library/firebaseConfig";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
 } from "firebase/auth";
-import { initUserEntry } from "./database";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { initUserEntry } from "@/backend/database";
 
-export const signUpUser = async (email, password) => {
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    
-    // Initialize user data in database
-    await initUserEntry(user.uid, {
-      email: user.email,
-      displayName: user.displayName || email.split('@')[0],
-      createdAt: new Date().toISOString(),
-      lastLogin: new Date().toISOString(),
-      settings: {
-        theme: 'dark',
-        notifications: true
-      }
-    });
-
-    return { success: true, user };
-  } catch (error) {
-    console.error('Error signing up:', error);
-    return { success: false, error: error.message };
-  }
+export const getUserUID = () => {
+  return auth.currentUser?.uid;
 };
 
-export const signInUser = async (email, password) => {
+export const signUpUser = async (email, password, setUser) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return { success: true, user: userCredential.user };
-  } catch (error) {
-    console.error('Error signing in:', error);
-    return { success: false, error: error.message };
-  }
-};
-
-export const signInWithGoogle = async () => {
-  try {
-    const provider = new GoogleAuthProvider();
-    const userCredential = await signInWithPopup(auth, provider);
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
     const user = userCredential.user;
-
-    // Check if this is a new user and initialize their data
-    const isNewUser = userCredential._tokenResponse?.isNewUser;
-    if (isNewUser) {
-      await initUserEntry(user.uid, {
-        email: user.email,
-        displayName: user.displayName,
-        createdAt: new Date().toISOString(),
-        lastLogin: new Date().toISOString(),
-        settings: {
-          theme: 'dark',
-          notifications: true
-        }
-      });
+    await initUserEntry(user.uid, email);
+    setUser(user);
+    return true;
+  } catch (error) {
+    if (error.code === "auth/email-already-in-use") {
+      throw new Error(
+        "This email is already registered. Please sign in instead."
+      );
     }
-
-    return { success: true, user };
-  } catch (error) {
-    console.error('Error signing in with Google:', error);
-    return { success: false, error: error.message };
-  }
-};
-
-export const signOutUser = async () => {
-  try {
-    await signOut(auth);
-    return { success: true };
-  } catch (error) {
-    console.error('Error signing out:', error);
-    return { success: false, error: error.message };
-  }
-};
-
-export const initializeUserData = async (uid, email) => {
-  try {
-    await setDoc(doc(db, "users", uid), {
-      journals: [],
-      interests: [],
-      activeMainQuests: [],
-      activeSideQuests: [],
-      completeQuests: [],
-      points: 0,
-      currentStreakDays: 0,
-      longestStreakDays: 0,
-      lastActive: serverTimestamp(),
-      calendar: [],
-      userName: email,
-    });
-  } catch (error) {
-    console.error("Error initializing user data:", error);
+    if (error.code === "auth/weak-password") {
+      throw new Error("Password should be at least 6 characters long.");
+    }
     throw error;
+  }
+};
+
+export const logUserIn = async (email, password, setUser) => {
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    setUser(user);
+    return user;
+  } catch (error) {
+    if (error.code === "auth/user-not-found") {
+      throw new Error(
+        "No account found with this email. Please sign up first."
+      );
+    }
+    if (error.code === "auth/wrong-password") {
+      throw new Error("Incorrect password. Please try again.");
+    }
+    throw error;
+  }
+};
+
+const provider = new GoogleAuthProvider();
+
+export const logUserInGoogle = async (setUser) => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    setUser(user);
+    return user;
+  } catch (error) {
+    throw new Error("Failed to sign in with Google: " + error.message);
   }
 };

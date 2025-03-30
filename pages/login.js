@@ -50,7 +50,6 @@ export default function Login() {
               Welcome back to QuestLog
             </p>
           </div>
-
           <form className="mt-8 space-y-6 relative" onSubmit={handleSubmit}>
             {error && (
               <div className="text-[#FF2E63] text-sm text-center font-mono">

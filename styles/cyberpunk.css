@@ -1,0 +1,56 @@
+.cyber-card {
+  @apply bg-[rgba(26,26,46,0.7)] p-6 backdrop-blur-md relative;
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    16px 100%,
+    0 calc(100% - 16px)
+  );
+}
+
+.clip-path-hexagon {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.clip-path-octagon {
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+}
+
+.clip-path-edge {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+}
+
+.clip-path-button {
+  clip-path: polygon(
+    16px 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% calc(100% - 16px),
+    calc(100% - 16px) 100%,
+    16px 100%,
+    0 calc(100% - 16px),
+    0 16px
+  );
+}
+
+.clip-path-progress {
+  clip-path: polygon(
+    4px 0,
+    calc(100% - 4px) 0,
+    100% 4px,
+    100% calc(100% - 4px),
+    calc(100% - 4px) 100%,
+    4px 100%,
+    0 calc(100% - 4px),
+    0 4px
+  );
+} 
