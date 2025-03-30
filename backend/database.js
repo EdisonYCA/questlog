@@ -1,6 +1,9 @@
-import { doc, setDoc, updateDoc, arrayUnion, arrayRemove, serverTimestamp, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import { doc, setDoc, updateDoc, arrayUnion, arrayRemove, serverTimestamp, getDoc } from "firebase/firestore";
 import { db } from "@/library/firebaseConfig";
+import { getUserUID } from "@/backend/auth";
+import { auth } from "@/library/firebaseConfig";
 
+// Helper function to update user document data
 const updateUserData = async (uid, data) => {
   const userRef = doc(db, "users", uid);
 
@@ -20,8 +23,8 @@ export const initUserEntry = async (uid, email) => {
       activeSideQuests: [],
       completeQuests: [],
       points: 0,
-      currentStreakDays: 0,
-      longestStreakDays: 0,
+      currentStreakDays: 1,
+      longestStreakDays: 1,
       lastActive: serverTimestamp(),
       calendar: [],
       userName: email,
@@ -31,53 +34,8 @@ export const initUserEntry = async (uid, email) => {
   }
 };
 
-export const getJournalEntries = async (uid) => {
-  try {
-    const userRef = doc(db, "users", uid);
-    const userDoc = await getDoc(userRef);
-    
-    if (userDoc.exists()) {
-      return userDoc.data().journals || [];
-    }
-    return [];
-  } catch (error) {
-    console.error("Error getting journal entries:", error);
-    return [];
-  }
-};
-
-export const addJournalEntry = async (uid, entry) => {
-  try {
-    const userRef = doc(db, "users", uid);
-    const userDoc = await getDoc(userRef);
-    
-    if (!userDoc.exists()) {
-      throw new Error("User document not found");
-    }
-
-    const currentDate = new Date().toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-
-    const newEntry = {
-      id: Date.now(),
-      title: entry.title,
-      body: entry.body,
-      date: currentDate,
-      timestamp: serverTimestamp(),
-    };
-
-    await updateDoc(userRef, {
-      journals: arrayUnion(newEntry)
-    });
-
-    return newEntry;
-  } catch (error) {
-    console.error("Error adding journal entry:", error);
-    throw error;
-  }
+export const addJournalEntry = async (entry) => {
+  updateUserData(getUserUID(), { journals: arrayUnion(...entry) });
 };
 
 export const removeJournalEntry = async (entry) => {
@@ -108,8 +66,46 @@ export const addPoints = async (points) => {
   updateUserData(getUserUID(), { points });
 };
 
-export const addCurrentStreakDays = async (days) => {
-  updateUserData(getUserUID(), { currentStreakDays: days });
+export const addCurrentStreakDays = async () => {
+  const uid = getUserUID();
+  if (!uid) return;
+
+  const userRef = doc(db, "users", uid);
+  const userDoc = await getDoc(userRef);
+  
+  if (!userDoc.exists()) return;
+
+  const userData = userDoc.data();
+  const lastActive = userData.lastActive?.toDate();
+  const currentDate = new Date();
+  
+  // Reset time to midnight for date comparison
+  lastActive.setHours(0, 0, 0, 0);
+  currentDate.setHours(0, 0, 0, 0);
+  
+  // Calculate days difference
+  const daysDiff = Math.floor((currentDate - lastActive) / (1000 * 60 * 60 * 24));
+  
+  let newStreak = userData.currentStreakDays;
+  
+  if (daysDiff === 1) {
+    // If last active was yesterday, increment streak
+    newStreak = userData.currentStreakDays + 1;
+    
+    // Update longest streak if current streak is higher
+    if (newStreak > userData.longestStreakDays) {
+      await updateUserData(uid, { longestStreakDays: newStreak });
+    }
+  } else if (daysDiff > 1) {
+    // If more than one day has passed, reset streak to 1
+    newStreak = 1;
+  }
+  
+  // Update current streak and last active time
+  await updateUserData(uid, {
+    currentStreakDays: newStreak,
+    lastActive: serverTimestamp()
+  });
 };
 
 export const addLongestStreakDays = async (days) => {
@@ -131,3 +127,29 @@ export const addLastActive = async (lastActive) => {
 export const addInterests = async (interests) => {
   updateUserData(getUserUID(), { interests });
 };
+
+export const saveUserInterests = async (interests) => {
+  try {
+    const uid = getUserUID();
+    if (!uid) {
+      throw new Error("No user logged in");
+    }
+
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+
+    if (!userDoc.exists()) {
+      // If user document doesn't exist, create it first
+      await initUserEntry(uid, auth.currentUser.email);
+    }
+
+    await updateDoc(userRef, {
+      interests: interests
+    });
+
+    return true;
+  } catch (error) {
+    console.error("Error saving user interests:", error);
+    throw error;
+  }
+}; 

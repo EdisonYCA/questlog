@@ -18,6 +18,17 @@ export default function Signup() {
       setError("Passwords do not match");
       return;
     }
+
+    try {
+      const success = await signUpUser(email, password);
+      if (success) {
+        // Wait a bit for Firebase Auth to fully initialize
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        router.push("/interests");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError(err.message || "An error occurred during signup");
     const result = await signUpUser(email, password);
     if (result.success) {
       router.push('/dashboard/journal');
