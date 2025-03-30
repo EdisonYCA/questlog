@@ -155,7 +155,7 @@ export default function WeeklyCalendar({ initialEvents = [] }) {
           headerToolbar={{
             left: "prev,next today",
             center: "title",
-            right: "dayGridMonth,timeGridWeek,timeGridDay",
+            right: null
           }}
           dayHeaderClassNames={() => "bg-[#1F1225] text-[#FF2E63] font-mono"}
           slotLabelClassNames={() => "text-[#08F7FE] font-mono"}
