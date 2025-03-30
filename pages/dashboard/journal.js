@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import Navbar from '@/components/landing/Navbar';
+import { addJournalEntry } from '@/backend/database';
+import { useStateContext } from '@/context/StateContent';
+
 export default function Journal() {
   const [isEntryOpen, setIsEntryOpen] = useState(false);
   const [newEntry, setNewEntry] = useState({ title: '', body: '' });
   const [entries, setEntries] = useState([]);
+  const { user } = useStateContext();
 
   const formatText = (text) => {
     return text.split('\n').map((line, i) => (
@@ -14,7 +18,7 @@ export default function Journal() {
     ));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (newEntry.title.trim() === '' && newEntry.body.trim() === '') return;
     
     const currentDate = new Date().toLocaleDateString('en-US', {
@@ -30,9 +34,15 @@ export default function Journal() {
       date: currentDate
     };
 
-    setEntries([newEntryObj, ...entries]);
-    setNewEntry({ title: '', body: '' });
-    setIsEntryOpen(false);
+    try {
+      await addJournalEntry([newEntryObj]);
+      setEntries([newEntryObj, ...entries]);
+      setNewEntry({ title: '', body: '' });
+      setIsEntryOpen(false);
+    } catch (error) {
+      console.error('Failed to add journal entry:', error);
+      alert('Failed to save journal entry. Please try again.');
+    }
   };
 
   // Group entries by date
