@@ -1,12 +1,13 @@
 import { auth, db } from "@/library/firebaseConfig";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, getDoc } from "firebase/firestore";
+import { initUserEntry } from "@/backend/database";
 
 export const signUpUser = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      // TODO: add user user to database
+      initUserEntry(user.uid, email);
+      setUser(user);
       return true;
     })
     .catch((error) => {
