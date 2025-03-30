@@ -36,10 +36,15 @@ export default function signup() {
     }
 
     try {
-      await signUpUser(email, password);
-      router.push("/interests");
+      const success = await signUpUser(email, password);
+      if (success) {
+        // Wait a bit for Firebase Auth to fully initialize
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        router.push("/interests");
+      }
     } catch (err) {
-      setError(err.message);
+      console.error("Signup error:", err);
+      setError(err.message || "An error occurred during signup");
     }
   };
 
