@@ -100,10 +100,6 @@ export default function WeeklyCalendar() {
 
   return (
     <div className="min-h-screen bg-[#150A18] text-white font-mono p-6">
-      <h1 className="text-4xl font-bold text-[#FF2E63] mb-6 drop-shadow-[0_0_8px_rgba(255,46,99,0.8)] text-center">
-        QuestLog Scheduler
-      </h1>
-
       <div className="bg-[#1F1225] rounded-xl p-4 relative">
         {/* Angular cuts using pseudo-elements */}
         <div className="absolute -top-[2px] -left-[2px] w-4 h-4 border-t-2 border-l-2 border-[#08F7FE]" />
